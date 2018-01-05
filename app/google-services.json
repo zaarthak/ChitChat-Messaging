@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "179787290210",
+    "firebase_url": "https://chitchat-messaging-app.firebaseio.com",
+    "project_id": "chitchat-messaging-app",
+    "storage_bucket": "chitchat-messaging-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179787290210:android:ed1df5b62f9ee5fd",
+        "android_client_info": {
+          "package_name": "com.example.sarthak.chitchatmessagingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "179787290210-rrt8476r16qk710l6clttd0uhv8it259.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sarthak.chitchatmessagingapp",
+            "certificate_hash": "0f93dbea1f61749e0f026b167163aa0325d91c0e"
+          }
+        },
+        {
+          "client_id": "179787290210-lhsf03ruv3clcp7ms7epddv2nvim9pqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC-xwb1BRldFOsD_vpMMctliRXaAebGCQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "179787290210-lhsf03ruv3clcp7ms7epddv2nvim9pqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179787290210:android:b1e364c504372cb6",
+        "android_client_info": {
+          "package_name": "com.chitchat.messaging.chitchatmessaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "179787290210-6g5beg9gg0jv1412g7g767kcfgffcm0a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chitchat.messaging.chitchatmessaging",
+            "certificate_hash": "6bfeb9fe6f83e97142d5cae8fd790e462b234404"
+          }
+        },
+        {
+          "client_id": "179787290210-lhsf03ruv3clcp7ms7epddv2nvim9pqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC-xwb1BRldFOsD_vpMMctliRXaAebGCQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "179787290210-lhsf03ruv3clcp7ms7epddv2nvim9pqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

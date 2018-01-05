@@ -1,0 +1,10 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="home_layout_margin">16dp</dimen>
+
+    <!-- Register activity dimens -->
+    <dimen name="register_layout_top_margin">90dp</dimen>
+    <dimen name="register_button_margin">25dp</dimen>
+    <dimen name="register_text_margin">20dp</dimen>
+</resources>
