@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_chat_list">
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/contact_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -130,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     // create a database reference for the user
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
 
-                    User user = new User(name, email);
+                    User user = new User(name, email, getString(R.string.default_status), "default", "default");
 
                     // store user details to firebase database
                     mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {

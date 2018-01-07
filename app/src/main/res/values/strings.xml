@@ -15,6 +15,22 @@
     <string name="register_hint_email">Email Address</string>
     <string name="register_create_account">Create a new account</string>
 
+    <!-- Strings related to Profile Activity -->
+    <string name="default_status">Hey there! I\'m using ChitChat Messaging App.</string>
+    <string name="display_name">Display Name</string>
+    <string name="btn_status">change status</string>
+    <string name="btn_profile_picture">change profile picture</string>
+
+    <!-- Strings related to Status Activity -->
+    <string name="status_activity_title">Account status</string>
+    <string name="btn_save_changes">SAVE CHANGES</string>
+    <string name="hint_account_status">Your Account Status</string>
+
+    <!-- Menu strings -->
+    <string name="menu_log_out">Log Out</string>
+    <string name="menu_all_users">All Users</string>
+    <string name="menu_account_settings">Settings</string>
+
     <string name="auth_failed">Authorisation failed.</string>
     <string name="user_activity_title">Select contact</string>
 

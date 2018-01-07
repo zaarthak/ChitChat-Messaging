@@ -15,7 +15,7 @@
         android:layout_marginTop="5dp">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/messageRecyclerView"
+            android:id="@+id/chat_messages_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none" />
@@ -35,18 +35,18 @@
         android:padding="2dp">
 
         <EditText
-            android:id="@+id/editTextMessage"
+            android:id="@+id/chat_input_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/buttonMessage" />
+            android:layout_toStartOf="@+id/chat_send_btn" />
 
         <ImageButton
-            android:id="@+id/buttonMessage"
+            android:id="@+id/chat_send_btn"
             android:src="@android:drawable/ic_menu_send"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="4dp"
-            android:layout_alignBottom="@+id/editTextMessage"
+            android:layout_alignBottom="@+id/chat_input_message"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>

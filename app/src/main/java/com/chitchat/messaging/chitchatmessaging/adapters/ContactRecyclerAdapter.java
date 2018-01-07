@@ -7,23 +7,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chitchat.messaging.chitchatmessaging.R;
+import com.chitchat.messaging.chitchatmessaging.models.Message;
 import com.chitchat.messaging.chitchatmessaging.models.User;
 import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
 
-public class UserRecyclerAdapter extends RecyclerView.Adapter<UserViewHolder> {
+public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactViewHolder> {
 
     private ArrayList<User> usersList = new ArrayList<>();
+    private ArrayList<Message> messageList = new ArrayList<>();
 
     private RecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
     private Context mContext;
 
-    public UserRecyclerAdapter(Context context, ArrayList<User> list) {
+    public ContactRecyclerAdapter(Context context, ArrayList<User> usersList, ArrayList<Message> messageList) {
 
         this.mContext = context;
-        this.usersList = list;
+        this.usersList = usersList;
+        this.messageList = messageList;
     }
 
     public void setOnRecyclerViewItemClickListener(RecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -31,19 +34,20 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserViewHolder> {
     }
 
     @Override
-    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_users, parent, false);
 
-        return new UserViewHolder(itemView);
+        return new ContactViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, final int position) {
+    public void onBindViewHolder(ContactViewHolder holder, final int position) {
 
         User user = usersList.get(holder.getAdapterPosition());
+        Message message = messageList.get(holder.getAdapterPosition());
 
-        holder.bindData(mContext, user);
+        holder.bindData(mContext, user, message);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

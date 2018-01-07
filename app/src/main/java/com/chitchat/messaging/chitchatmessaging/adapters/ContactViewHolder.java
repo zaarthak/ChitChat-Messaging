@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.chitchat.messaging.chitchatmessaging.R;
+import com.chitchat.messaging.chitchatmessaging.activities.AccountSettingsActivity;
+import com.chitchat.messaging.chitchatmessaging.models.Message;
 import com.chitchat.messaging.chitchatmessaging.models.User;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -13,16 +15,17 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserViewHolder extends RecyclerView.ViewHolder {
+public class ContactViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView mName, mId;
+    public TextView mName, mContent;
     public CircleImageView mProfileImage;
 
-    public UserViewHolder(View itemView) {
+    public ContactViewHolder(View itemView) {
+
         super(itemView);
 
         mName = itemView.findViewById(R.id.users_name);
-        mId = itemView.findViewById(R.id.users_status);
+        mContent = itemView.findViewById(R.id.users_status);
         mProfileImage = itemView.findViewById(R.id.user_image);
     }
 
@@ -31,10 +34,10 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
      *
      * @param user is the user details list to set in every row
      */
-    void bindData(final Context context, final User user) {
+    void bindData(final Context context, final User user, Message message) {
 
         mName.setText(user.username);
-        mId.setText(user.status);
+        mContent.setText(message.content);
 
         if (!user.thumb_image.equals("default")) {
 
