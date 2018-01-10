@@ -9,6 +9,9 @@
         android:id="@+id/main_all_users_btn"
         android:title="@string/menu_all_users" />
     <item
+        android:id="@+id/main_invite_btn"
+        android:title="@string/menu_invite_friends" />
+    <item
         android:id="@+id/main_logout_btn"
         android:title="@string/menu_log_out" />
 </menu>

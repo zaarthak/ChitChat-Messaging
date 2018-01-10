@@ -1,6 +1,7 @@
 package com.chitchat.messaging.chitchatmessaging.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.chitchat.messaging.chitchatmessaging.models.Message;
 import com.chitchat.messaging.chitchatmessaging.models.User;
 import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListener;
 import com.chitchat.messaging.chitchatmessaging.utils.SimpleDividerItemDecoration;
+import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +37,8 @@ import java.util.TreeMap;
 
 public class ChatListActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewItemClickListener {
 
+    private static final int REQUEST_INVITE = 475;
+
     private ArrayList<User> usersList = new ArrayList<>();
     private ArrayList<String> userKeyList = new ArrayList<>();
     private ArrayList<Message> lastMessageList = new ArrayList<>();
@@ -42,7 +46,6 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     private ContactRecyclerAdapter adapter;
 
     DatabaseReference mDatabase;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,6 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         mDatabase.keepSynced(true);
 
         readContacts();
-        //readLastMessage();
 
         RecyclerView mContactList = findViewById(R.id.contact_list);
         mContactList.setLayoutManager(new LinearLayoutManager(this));
@@ -124,6 +126,11 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(settingsIntent);
                 break;
 
+            case R.id.main_invite_btn:
+
+                inviteFriends();
+                break;
+
             case R.id.main_all_users_btn :
                 // launch settings activity
                 Intent usersIntent = new Intent(ChatListActivity.this, UserActivity.class);
@@ -133,6 +140,24 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         }
 
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_INVITE) {
+            if (resultCode == RESULT_OK) {
+                // Get the invitation IDs of all sent messages
+                String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
+                for (String id : ids) {
+                    Log.d("", "onActivityResult: sent invitation " + id);
+                }
+            } else {
+                // Sending failed or it was canceled, show failure message to the user
+                // ...
+            }
+        }
     }
 
     private void readContacts() {
@@ -176,6 +201,17 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
             }
         });
+    }
+
+    private void inviteFriends() {
+
+        Intent intent = new AppInviteInvitation.IntentBuilder("Send application invitation")
+                .setMessage("Welcome to ChitChat Messaging Application")
+                .setDeepLink(Uri.parse("https://arunsharma.me/blog/how-to-use-firebase-dynamic-links-and-invites/"))
+                //.setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
+                //.setCallToActionText(getString(R.string.invitation_cta))
+                .build();
+        startActivityForResult(intent, REQUEST_INVITE);
     }
 
     /**

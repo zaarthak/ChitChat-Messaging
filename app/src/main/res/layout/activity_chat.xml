@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/chat_background" >
+    android:background="@color/chat_background">
 
     <include layout="@layout/app_bar_toolbar" android:id="@+id/chat_toolbar" />
 
@@ -20,34 +20,60 @@
             android:layout_height="match_parent"
             android:scrollbars="none" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:layout_gravity="bottom"
-            android:background="@drawable/shadow_top" />
-
     </FrameLayout>
 
     <RelativeLayout
-        android:background="#fff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp">
+        android:layout_margin="4dp">
 
-        <EditText
-            android:id="@+id/chat_input_message"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/chat_send_btn" />
+            android:weightSum="9"
+            android:padding="5dp"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/chat_send_btn"
+            android:layout_alignTop="@+id/chat_send_btn"
+            android:layout_alignBottom="@+id/chat_send_btn"
+            android:background="@drawable/input_message_background">
+
+            <ImageButton
+                android:id="@+id/chat_add_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:alpha="0.5"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_add_black_24dp" />
+
+            <EditText
+                android:id="@+id/chat_input_message"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:hint="Enter Message..."
+                android:inputType="textPersonName"
+                android:gravity="center_vertical"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"/>
+
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/chat_send_btn"
-            android:src="@android:drawable/ic_menu_send"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="4dp"
-            android:layout_alignBottom="@+id/chat_input_message"
-            android:layout_alignParentEnd="true" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:background="@drawable/send_btn_background"
+            android:padding="10dp"
+            android:layout_marginStart="4dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_send_black_24dp" />
 
     </RelativeLayout>
 

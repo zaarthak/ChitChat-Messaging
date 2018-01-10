@@ -45,7 +45,7 @@
         android:id="@+id/home_login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/home_register_btn"
+        android:layout_above="@+id/linear_layout"
         android:layout_marginStart="@dimen/home_layout_margin"
         android:layout_marginEnd="@dimen/home_layout_margin"
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -53,15 +53,38 @@
         android:textColor="#fff"
         android:background="@color/colorPrimary" />
 
-    <Button
-        android:id="@+id/home_register_btn"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/home_sign_up"
-        android:background="@color/transparentColor"
-        android:textColor="#000"
-        android:textAllCaps="false"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginStart="@dimen/home_layout_margin"
+        android:layout_marginEnd="@dimen/home_layout_margin"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/home_register_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/home_sign_up"
+            android:background="@color/transparentColor"
+            android:textColor="#000"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/home_forgot_pass_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/home_forgot_password"
+            android:background="@color/transparentColor"
+            android:textColor="#000"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
 
 </RelativeLayout>

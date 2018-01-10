@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class HomeScreenActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mEmailInput, mPassInput;
-    private Button mLoginButton, mRegButton;
+    private Button mLoginButton, mRegButton, mForgotPassBtn;
 
     private FirebaseAuth mAuth;
 
@@ -39,6 +39,7 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
         //-------------------------------------------------------------------
         mRegButton.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
+        mForgotPassBtn.setOnClickListener(this);
     }
 
     //---------------------------------------------------------------------------------------
@@ -58,6 +59,11 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
 
                 loginUser();
                 break;
+
+            case R.id.home_forgot_pass_btn:
+
+                launchPasswordActivity();
+                break;
         }
     }
 
@@ -68,6 +74,7 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
 
         mRegButton = findViewById(R.id.home_register_btn);
         mLoginButton = findViewById(R.id.home_login_btn);
+        mForgotPassBtn = findViewById(R.id.home_forgot_pass_btn);
 
         mEmailInput = findViewById(R.id.home_email);
         mPassInput = findViewById(R.id.home_password);
@@ -141,5 +148,11 @@ public class HomeScreenActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
+    }
+
+    private void launchPasswordActivity() {
+
+        Intent passwordIntent = new Intent(HomeScreenActivity.this, PasswordActivity.class);
+        startActivity(passwordIntent);
     }
 }
