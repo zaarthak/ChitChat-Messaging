@@ -19,6 +19,7 @@ import com.chitchat.messaging.chitchatmessaging.models.Message;
 import com.chitchat.messaging.chitchatmessaging.models.User;
 import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListener;
 import com.chitchat.messaging.chitchatmessaging.utils.SimpleDividerItemDecoration;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.appinvite.AppInviteInvitation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,12 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 public class ChatListActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewItemClickListener {
 
@@ -56,7 +51,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
 
-            startActivity(new Intent(ChatListActivity.this, HomeScreenActivity.class));
+            startActivity(new Intent(ChatListActivity.this, LoginActivity.class));
             finish();
         }
 
@@ -116,6 +111,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
             case R.id.main_logout_btn :
                 // sign out from firebase authentication
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 // launch StartActivity
                 logOut();
                 break;
@@ -219,7 +215,7 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
      */
     private void logOut() {
 
-        Intent startIntent = new Intent(ChatListActivity.this, HomeScreenActivity.class);
+        Intent startIntent = new Intent(ChatListActivity.this, LoginActivity.class);
         startActivity(startIntent);
         finish();
     }

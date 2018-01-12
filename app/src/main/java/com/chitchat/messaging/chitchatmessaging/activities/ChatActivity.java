@@ -57,7 +57,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         adapter = new ChatRecyclerAdapter(ChatActivity.this, messageList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
         mMessageList.setLayoutManager(linearLayoutManager);
         mMessageList.setAdapter(adapter);
 
@@ -143,7 +143,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                         if (!child.getKey().equals("lastMessage")) {
 
-                            messageList.add(child.getValue(Message.class));
+                            messageList.add(0, child.getValue(Message.class));
                             adapter.notifyDataSetChanged();
                         }
                     }

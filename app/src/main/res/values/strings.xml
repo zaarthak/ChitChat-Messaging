@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">ChitChat</string>
 
+    <string name="facebook_app_id">318183688588223</string>
+    <string name="fb_login_protocol_scheme">fb318183688588223</string>
+
     <string name="home_log_in">LOG IN</string>
     <string name="home_sign_up">New User? Sign up</string>
     <string name="home_error_message">Username and password combination not correct.</string>
