@@ -37,7 +37,12 @@ public class ContactViewHolder extends RecyclerView.ViewHolder {
     void bindData(final Context context, final User user, Message message) {
 
         mName.setText(user.username);
-        mContent.setText(message.content);
+
+        if (message.media.equals("text")) {
+            mContent.setText(message.content);
+        } else {
+            mContent.setText("Image");
+        }
 
         if (!user.thumb_image.equals("default")) {
 

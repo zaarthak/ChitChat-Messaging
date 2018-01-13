@@ -30,6 +30,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener, FacebookCallback<LoginResult> {
 
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private LoginButton mFbLoginBtn;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     private GoogleApiClient mGoogleApiClient;
     private CallbackManager mCallbackManager;
@@ -55,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setUpView();
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
 
         // configure sign-in to request the user's ID, email address, and basic profile
         // ID and basic profile are included in DEFAULT_SIGN_IN
@@ -202,15 +207,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if (task.isSuccessful()) {
 
-                    // dismiss progress dialog
-                    mProgressDialog.dismiss();
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
-                    // launch LoginActivity when user registration is complete
-                    Intent mainIntent = new Intent(LoginActivity.this, ChatListActivity.class);
-                    startActivity(mainIntent);
+                    mDatabase.child(mAuth.getCurrentUser().getUid()).child("deviceToken").setValue(deviceToken).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
-                    // finish current activity
-                    finish();
+                            // dismiss progress dialog
+                            mProgressDialog.dismiss();
+                            // launch LoginActivity when user registration is complete
+                            Intent mainIntent = new Intent(LoginActivity.this, ChatListActivity.class);
+                            startActivity(mainIntent);
+                            // finish current activity
+                            finish();
+                        }
+                    });
                 } else {
 
                     // display error message

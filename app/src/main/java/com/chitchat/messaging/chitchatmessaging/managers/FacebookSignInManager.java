@@ -17,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -49,35 +50,57 @@ public class FacebookSignInManager {
                             // create an instance of firebase database for the user
                             mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getUid());
 
-                            User user = new User(mUser.getDisplayName(), mUser.getEmail(), mContext.getString(R.string.default_status), mUser.getPhotoUrl().toString(), mUser.getPhotoUrl().toString());
+                            getImageUrl(mUser, mDatabase);
 
-                            // store user details to firebase database
-                            mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-
-                                    if (task.isSuccessful()) {
-
-                                        // launch LoginActivity when user registration is complete
-                                        Intent mainActivity = new Intent(mContext, ChatListActivity.class);
-                                        mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        mContext.startActivity(mainActivity);
-
-                                        // finish current activity
-                                        ((Activity) mContext).finish();
-                                    } else {
-
-                                        // display error message
-                                        Toast.makeText(mContext, "Oops.", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(mContext, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    public void getImageUrl(FirebaseUser mUser, DatabaseReference mDatabase) {
+
+        String photoUrl;
+
+        for (UserInfo profile : mAuth.getCurrentUser().getProviderData()) {
+
+            System.out.println(profile.getProviderId());
+            // check if the provider id matches "facebook.com"
+            if (profile.getProviderId().equals("facebook.com")) {
+
+                String facebookUserId = profile.getUid();
+
+                // construct the URL to the profile picture, with a custom height
+                // alternatively, use '?type=small|medium|large' instead of ?height=
+                photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+
+                User user = new User(mUser.getDisplayName(), mUser.getEmail(), mContext.getString(R.string.default_status), photoUrl, mUser.getPhotoUrl().toString());
+
+                // store user details to firebase database
+                mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()) {
+
+                            // launch LoginActivity when user registration is complete
+                            Intent mainActivity = new Intent(mContext, ChatListActivity.class);
+                            mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            mContext.startActivity(mainActivity);
+
+                            // finish current activity
+                            ((Activity) mContext).finish();
+                        } else {
+
+                            // display error message
+                            Toast.makeText(mContext, "Oops.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }
     }
 }

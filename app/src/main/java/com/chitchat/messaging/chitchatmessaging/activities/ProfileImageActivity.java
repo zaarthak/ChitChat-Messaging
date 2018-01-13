@@ -15,8 +15,6 @@ public class ProfileImageActivity extends AppCompatActivity {
 
     private SquareImageView mProfileImage;
 
-    private Toolbar mToolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +43,7 @@ public class ProfileImageActivity extends AppCompatActivity {
 
     private void setUpView() {
 
-        mToolbar = findViewById(R.id.profile_image_toolbar);
+        Toolbar mToolbar = findViewById(R.id.profile_image_toolbar);
 
         if (mToolbar != null) {
 
