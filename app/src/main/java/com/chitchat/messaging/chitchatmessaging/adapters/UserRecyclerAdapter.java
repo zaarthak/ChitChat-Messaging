@@ -12,6 +12,12 @@ import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListe
 
 import java.util.ArrayList;
 
+/**
+ * User RecyclerView adapter.
+ *
+ * @author Sarthak Grover
+ */
+
 public class UserRecyclerAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     private ArrayList<User> usersList = new ArrayList<>();

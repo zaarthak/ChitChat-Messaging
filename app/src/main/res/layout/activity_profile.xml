@@ -6,11 +6,11 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="@dimen/profile_image_size"
+        android:layout_height="@dimen/profile_image_size"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/profile_margin_top"
         android:src="@drawable/default_profile_picture" />
 
     <TextView
@@ -19,22 +19,22 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_image"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/profile_display_name_margin"
         android:text="@string/display_name"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="30sp" />
+        android:textSize="@dimen/settings_display_name_size" />
 
     <TextView
         android:id="@+id/profile_status"
-        android:layout_width="240dp"
+        android:layout_width="@dimen/profile_status_width"
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="@dimen/profile_status_margin"
         android:text="@string/default_status"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:textSize="@dimen/settings_status_size" />
 
 </RelativeLayout>

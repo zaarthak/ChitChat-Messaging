@@ -3,6 +3,7 @@ package com.chitchat.messaging.chitchatmessaging.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,13 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.chitchat.messaging.chitchatmessaging.R;
-import com.chitchat.messaging.chitchatmessaging.adapters.ContactRecyclerAdapter;
+import com.chitchat.messaging.chitchatmessaging.adapters.ChatListRecyclerAdapter;
 import com.chitchat.messaging.chitchatmessaging.models.Message;
 import com.chitchat.messaging.chitchatmessaging.models.User;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListener;
 import com.chitchat.messaging.chitchatmessaging.utils.SimpleDividerItemDecoration;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.appinvite.AppInviteInvitation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,13 +36,14 @@ import java.util.ArrayList;
 
 public class ChatListActivity extends AppCompatActivity implements View.OnClickListener, RecyclerViewItemClickListener {
 
-    private static final int REQUEST_INVITE = 475;
-
     private ArrayList<User> usersList = new ArrayList<>();
     private ArrayList<String> userKeyList = new ArrayList<>();
     private ArrayList<Message> lastMessageList = new ArrayList<>();
 
-    private ContactRecyclerAdapter adapter;
+    private ArrayList<Integer> unreadMessageCountList = new ArrayList<>();
+
+    private RecyclerView mContactList;
+    private ChatListRecyclerAdapter adapter;
 
     DatabaseReference mDatabase;
 
@@ -49,27 +54,29 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // check user login
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
 
             startActivity(new Intent(ChatListActivity.this, LoginActivity.class));
             finish();
         }
 
+        // initialise all view components
+        setUpView();
+
+        // set up firebase database reference
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        // enable firebase persistence
         mDatabase.keepSynced(true);
 
+        // read contacts with whom conversation has taken place
         readContacts();
 
-        RecyclerView mContactList = findViewById(R.id.contact_list);
+        adapter = new ChatListRecyclerAdapter(ChatListActivity.this, usersList, userKeyList, lastMessageList, unreadMessageCountList);
+        adapter.setOnRecyclerViewItemClickListener(this);
         mContactList.setLayoutManager(new LinearLayoutManager(this));
         mContactList.addItemDecoration(new SimpleDividerItemDecoration(this));
-
-        adapter = new ContactRecyclerAdapter(ChatListActivity.this, usersList, lastMessageList);
-        adapter.setOnRecyclerViewItemClickListener(this);
         mContactList.setAdapter(adapter);
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(this);
     }
 
     @Override
@@ -79,17 +86,21 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.fab :
 
+                // start user activity
                 startActivity(new Intent(ChatListActivity.this, UserActivity.class));
                 break;
         }
     }
 
+    //----------------------------------------------------------------------------------------------
+    // recyclerView item click listener
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view, int position) {
 
         Intent chatIntent = new Intent(ChatListActivity.this, ChatActivity.class);
-        chatIntent.putExtra("user_name", usersList.get(position).username);
-        chatIntent.putExtra("user_id", userKeyList.get(position));
+        chatIntent.putExtra(Constants.INTENT_USER_NAME_KEY, usersList.get(position).username);
+        chatIntent.putExtra(Constants.INTENT_USER_ID_KEY, userKeyList.get(position));
         startActivity(chatIntent);
     }
 
@@ -109,11 +120,16 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         switch (item.getItemId()) {
 
             case R.id.main_logout_btn :
-                // sign out from firebase authentication
-                FirebaseAuth.getInstance().signOut();
-                LoginManager.getInstance().logOut();
-                // launch StartActivity
-                logOut();
+
+                mDatabase.child(Constants.USERS_REFERENCE).child(getCurrentUser()).child(Constants.DEVICE_TOKEN_REFERENCE).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        FirebaseAuth.getInstance().signOut();
+                        LoginManager.getInstance().logOut();
+                        logOut();
+                    }
+                });
                 break;
 
             case R.id.main_settings_btn :
@@ -128,11 +144,10 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.main_all_users_btn :
-                // launch settings activity
+                // launch user activity
                 Intent usersIntent = new Intent(ChatListActivity.this, UserActivity.class);
                 startActivity(usersIntent);
                 break;
-
         }
 
         return true;
@@ -142,13 +157,10 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_INVITE) {
+        if (requestCode == Constants.REQUEST_INVITE) {
             if (resultCode == RESULT_OK) {
                 // Get the invitation IDs of all sent messages
                 String[] ids = AppInviteInvitation.getInvitationIds(resultCode, data);
-                for (String id : ids) {
-                    Log.d("", "onActivityResult: sent invitation " + id);
-                }
             } else {
                 // Sending failed or it was canceled, show failure message to the user
                 // ...
@@ -156,31 +168,64 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Initialise all view components
+     */
+    private void setUpView() {
+
+        mContactList = findViewById(R.id.contact_list);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(this);
+    }
+
+    /**
+     * Read contacts from firebase database with whom user has had a conversation
+     */
     private void readContacts() {
 
-        String currentUser = getCurrentUser();
+        final String currentUser = getCurrentUser();
 
-        mDatabase.child("Chats").child(currentUser).orderByChild("timeStamp").addValueEventListener(new ValueEventListener() {
+        mDatabase.child(Constants.CHATS_REFERENCE).child(currentUser).orderByChild(Constants.TIMESTAMP_REFERENCE).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot chatDataSnapshot) {
 
                 usersList.clear();
                 userKeyList.clear();
                 lastMessageList.clear();
+                unreadMessageCountList.clear();
 
-                if (dataSnapshot.exists()) {
+                if (chatDataSnapshot.exists()) {
 
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot dataSnapshot : chatDataSnapshot.getChildren()) {
 
-                        lastMessageList.add(0,snapshot.getValue(Message.class));
+                        lastMessageList.add(0, dataSnapshot.getValue(Message.class));
 
-                        mDatabase.child("Users").child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                        mDatabase.child(Constants.USERS_REFERENCE).child(dataSnapshot.getKey()).addValueEventListener(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            public void onDataChange(final DataSnapshot userSnapshot) {
 
-                                usersList.add(0, dataSnapshot.getValue(User.class));
-                                userKeyList.add(0, dataSnapshot.getKey());
-                                adapter.notifyDataSetChanged();
+                                usersList.add(0, userSnapshot.getValue(User.class));
+                                userKeyList.add(0, userSnapshot.getKey());
+
+                                mDatabase.child(Constants.NOTIFICATIONS_REFERENCE).child(currentUser).child(userSnapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot notificationDataSnapshot) {
+
+                                        if (userKeyList.contains(userSnapshot.getKey())) {
+
+                                            //unreadMessageCountList.add(userKeyList.indexOf(userSnapshot.getKey()), (int) notificationDataSnapshot.getChildrenCount());
+                                        }
+
+                                        //Log.e("zxc1", String.valueOf(unreadMessageCountList.size()) + " " + notificationDataSnapshot.getChildrenCount());
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
 
                             @Override
@@ -201,13 +246,13 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
 
     private void inviteFriends() {
 
-        Intent intent = new AppInviteInvitation.IntentBuilder("Send application invitation")
+        Intent inviteIntent = new AppInviteInvitation.IntentBuilder("Send application invitation")
                 .setMessage("Welcome to ChitChat Messaging Application")
                 .setDeepLink(Uri.parse("https://arunsharma.me/blog/how-to-use-firebase-dynamic-links-and-invites/"))
                 //.setCustomImage(Uri.parse(getString(R.string.invitation_custom_image)))
                 //.setCallToActionText(getString(R.string.invitation_cta))
                 .build();
-        startActivityForResult(intent, REQUEST_INVITE);
+        startActivityForResult(inviteIntent, Constants.REQUEST_INVITE);
     }
 
     /**
@@ -220,7 +265,10 @@ public class ChatListActivity extends AppCompatActivity implements View.OnClickL
         finish();
     }
 
-    public String getCurrentUser() {
+    /**
+     * @return current user ID
+     */
+    private String getCurrentUser() {
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 

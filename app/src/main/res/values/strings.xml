@@ -1,21 +1,26 @@
 <resources>
     <string name="app_name">ChitChat</string>
 
+    <!-- Facebook setup strings -->
+    <string name="facebook_app_icon">&#xf082;</string>
     <string name="facebook_app_id">318183688588223</string>
     <string name="fb_login_protocol_scheme">fb318183688588223</string>
 
-    <string name="home_log_in">LOG IN</string>
-    <string name="home_sign_up">New User? Sign up</string>
-    <string name="home_error_message">Username and password combination not correct.</string>
-    <string name="home_progress_dialog_title">Logging in…</string>
-    <string name="home_progress_dialog_message">Please wait while we log you in</string>
-    <string name="register_hint_password">Password</string>
+    <!-- Strings related to Login Activity-->
+    <string name="login_log_in_btn">LOG IN</string>
+    <string name="login_sign_up">New User? Sign up</string>
+    <string name="login_error_message">Username and password combination not correct.</string>
+    <string name="login_progress_dialog_title">Logging in…</string>
+    <string name="login_progress_dialog_message">Please wait while we log you in</string>
+    <string name="login_forgot_password">Forgot Password?</string>
 
     <!-- Strings related to Register Activity -->
     <string name="register_progress_dialog_title">Registering User…</string>
     <string name="register_progress_dialog_message">Please wait while we setup things</string>
     <string name="register_hint_name">Name</string>
     <string name="register_hint_email">Email Address</string>
+    <string name="register_hint_password">Password</string>
+    <string name="register_hint_phone">Phone number</string>
     <string name="register_create_account">Create a new account</string>
 
     <!-- Strings related to Profile Activity -->
@@ -28,17 +33,39 @@
     <string name="status_activity_title">Account status</string>
     <string name="btn_save_changes">SAVE CHANGES</string>
     <string name="hint_account_status">Your Account Status</string>
+    <string name="change_status_progress_dialog_title">Saving changes</string>
+    <string name="change_status_progress_dialog_message">Please wait while we save changes</string>
+    <string name="change_status_success">Status updated.</string>
+    <string name="change_status_error">Error encountered.</string>
+
+    <!-- Strigs related to Password Activity -->
+    <string name="reset_password">Reset Password</string>
+    <string name="send_reset_link">Send reset link</string>
+    <string name="pass_email_sent">Email sent.</string>
+    <string name="pass_email_sent_error">An error occurred.</string>
+
+    <!-- Strings related to Send Image Activity-->
+    <string name="send_image_progress_dialog_title">Sending image…</string>
+    <string name="send_image_progress_dialog_message">Please wait while we send your image</string>
+    <string name="send_image_error">Failed sending image.</string>
+
+    <!-- Strings related to Account Settings Activity-->
+    <string name="profile_image_progress_dialog_message">Please wait while we change your profile picture…</string>
+    <string name="profile_image_progress_dialog_title">Changing profile picture</string>
+    <string name="profile_image_upload_failed">Update failed. Please try again.</string>
+    <string name="profile_image_update_msg">Profile Picture Updated.</string>
 
     <!-- Menu strings -->
     <string name="menu_log_out">Log Out</string>
     <string name="menu_all_users">All Users</string>
     <string name="menu_account_settings">Settings</string>
 
+    <!-- Other strings-->
     <string name="auth_failed">Authorisation failed.</string>
     <string name="user_activity_title">Select contact</string>
-    <string name="home_forgot_password">Forgot Password?</string>
-    <string name="send_reset_link">send reset link</string>
-    <string name="reset_password">Reset Password</string>
     <string name="menu_invite_friends">Invite Friends</string>
+    <string name="login_user_auth_failed">User authorisation failed.</string>
+    <string name="permission_error_toast">Cancelling, required permissions are not granted.</string>
+    <string name="imput_message_hint">Enter Message…</string>
 
 </resources>

@@ -11,6 +11,7 @@ import android.view.View;
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.User;
 import com.chitchat.messaging.chitchatmessaging.adapters.UserRecyclerAdapter;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListener;
 import com.chitchat.messaging.chitchatmessaging.utils.SimpleDividerItemDecoration;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +28,6 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
     private ArrayList<User> usersList = new ArrayList<>();
     private ArrayList<String> userKeyList = new ArrayList<>();
 
-    private RecyclerView mUserList;
     UserRecyclerAdapter adapter;
 
     @Override
@@ -35,9 +35,10 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
+        // fetch all users from firebase database
         fetchUserFromDatabase();
 
-        mUserList = findViewById(R.id.user_list);
+        RecyclerView mUserList = findViewById(R.id.user_list);
         adapter = new UserRecyclerAdapter(UserActivity.this, usersList);
         adapter.setOnRecyclerViewItemClickListener(this);
 
@@ -65,12 +66,15 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
         }
     }
 
+    /**
+     * Fetch all user details from firebase database
+     */
     private void fetchUserFromDatabase() {
 
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.keepSynced(true);
 
-        mDatabase.child("Users").orderByChild("username").addValueEventListener(new ValueEventListener() {
+        mDatabase.child(Constants.USERS_REFERENCE).orderByChild(Constants.USERNAME_REFERENCE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -98,12 +102,17 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
         });
     }
 
+    /**
+     * recyclerView onClick listener
+     *
+     * @param position is the position of the item in recyclerView
+     */
     @Override
     public void onClick(View view, int position) {
 
         Intent chatIntent = new Intent(UserActivity.this, ChatActivity.class);
-        chatIntent.putExtra("user_name", usersList.get(position).username);
-        chatIntent.putExtra("user_id", userKeyList.get(position));
+        chatIntent.putExtra(Constants.INTENT_USER_NAME_KEY, usersList.get(position).username);
+        chatIntent.putExtra(Constants.INTENT_USER_ID_KEY, userKeyList.get(position));
         startActivity(chatIntent);
         finish();
     }

@@ -13,12 +13,18 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserViewHolder extends RecyclerView.ViewHolder {
+/**
+ * View holder class for User Recycler adapter.
+ *
+ * Displays the user details in each row of RecyclerView.
+ */
 
-    public TextView mName, mId;
-    public CircleImageView mProfileImage;
+class UserViewHolder extends RecyclerView.ViewHolder {
 
-    public UserViewHolder(View itemView) {
+    private TextView mName, mId;
+    private CircleImageView mProfileImage;
+
+    UserViewHolder(View itemView) {
         super(itemView);
 
         mName = itemView.findViewById(R.id.users_name);
@@ -36,27 +42,23 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
         mName.setText(user.username);
         mId.setText(user.status);
 
-        if (!user.thumb_image.equals("default")) {
+        Picasso.with(context)
+                .load(user.thumb_image)
+                .placeholder(R.drawable.default_profile_picture)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(mProfileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // do nothing
+                    }
 
-            Picasso.with(context)
-                    .load(user.thumb_image)
-                    .placeholder(R.drawable.default_profile_picture)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(mProfileImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            // do nothing
-                        }
-
-                        @Override
-                        public void onError() {
-
-                            Picasso.with(context)
-                                    .load(user.thumb_image)
-                                    .placeholder(R.drawable.default_profile_picture)
-                                    .into(mProfileImage);
-                        }
-                    });
-        }
+                    @Override
+                    public void onError() {
+                        Picasso.with(context)
+                                .load(user.thumb_image)
+                                .placeholder(R.drawable.default_profile_picture)
+                                .into(mProfileImage);
+                    }
+                });
     }
 }

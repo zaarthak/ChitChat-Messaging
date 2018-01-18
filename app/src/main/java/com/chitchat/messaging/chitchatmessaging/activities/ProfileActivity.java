@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.User;
-import com.google.firebase.auth.FirebaseAuth;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,21 +28,28 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private CircleImageView mProfileImageView;
     private TextView mProfileNameTv, mStatusTv;
 
-    DatabaseReference mDatabase;
+    DatabaseReference mUserDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Users");
-        mDatabase.keepSynced(true);
-
+        // initialise all view components
         setUpView();
 
+        // set up firebase database reference
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_REFERENCE);
+        // enable firebase persistence
+        mUserDatabase.keepSynced(true);
+
+        // read user details from firebase database
         readUser();
     }
 
+    //----------------------------------------------------------------------------------------------
+    // imageView onClick listener
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
 
@@ -50,8 +57,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.profile_image:
 
+                // launch profileImage activity
                 Intent profileImageIntent = new Intent(ProfileActivity.this, ProfileImageActivity.class);
-                profileImageIntent.putExtra("imageUrl", user.image);
+                profileImageIntent.putExtra(Constants.INTENT_IMAGE_URL_KEY, user.image);
                 startActivity(profileImageIntent);
                 break;
         }
@@ -73,6 +81,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /**
+     * Initialise all view components
+     */
     private void setUpView() {
 
         if (getSupportActionBar() != null) {
@@ -89,38 +100,41 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         mProfileImageView.setOnClickListener(this);
     }
 
+    /**
+     * Read user details from firebase database and display in view components
+     */
     private void readUser() {
 
-        mDatabase.child(getIntent().getStringExtra("user_id")).addValueEventListener(new ValueEventListener() {
+        mUserDatabase.child(getIntent().getStringExtra(Constants.INTENT_USER_ID_KEY)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 user = dataSnapshot.getValue(User.class);
 
                 mProfileNameTv.setText(user.username);
-                if (!user.image.equals("default")) {
+                mStatusTv.setText(user.status);
 
-                    Picasso.with(getApplicationContext())
-                            .load(user.image)
-                            .placeholder(R.drawable.default_profile_picture)
-                            .resize(480,480)
-                            .networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(mProfileImageView, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    // do nothing
-                                }
+                Picasso.with(getApplicationContext())
+                        .load(user.image)
+                        .placeholder(R.drawable.default_profile_picture)
+                        .resize(480,480)
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(mProfileImageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                // do nothing
+                            }
 
-                                @Override
-                                public void onError() {
+                            @Override
+                            public void onError() {
 
-                                    Picasso.with(ProfileActivity.this)
-                                            .load(user.image)
-                                            .placeholder(R.drawable.default_profile_picture)
-                                            .into(mProfileImageView);
-                                }
-                            });
-                }
+                                Picasso.with(ProfileActivity.this)
+                                        .load(user.image)
+                                        .placeholder(R.drawable.default_profile_picture)
+                                        .into(mProfileImageView);
+                            }
+                        });
+
             }
 
             @Override

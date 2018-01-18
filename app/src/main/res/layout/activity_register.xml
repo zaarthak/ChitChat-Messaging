@@ -9,7 +9,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/register_layout_top_margin" >
+        android:layout_marginTop="@dimen/register_layout_top_margin"
+        android:layout_marginStart="@dimen/register_text_margin"
+        android:layout_marginEnd="@dimen/register_text_margin" >
 
         <EditText
             android:layout_width="match_parent"
@@ -25,7 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/register_text_margin" >
+        android:layout_marginTop="@dimen/register_text_margin"
+        android:layout_marginStart="@dimen/register_text_margin"
+        android:layout_marginEnd="@dimen/register_text_margin" >
 
         <EditText
             android:layout_width="match_parent"
@@ -41,7 +45,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/register_text_margin" >
+        android:layout_marginTop="@dimen/register_text_margin"
+        android:layout_marginStart="@dimen/register_text_margin"
+        android:layout_marginEnd="@dimen/register_text_margin" >
 
         <EditText
             android:layout_width="match_parent"
@@ -49,6 +55,24 @@
             android:hint="@string/register_hint_password"
             android:textColor="@color/textColor"
             android:inputType="textPassword"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/register_phone"
+        android:layout_below="@+id/register_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/register_text_margin"
+        android:layout_marginStart="@dimen/register_text_margin"
+        android:layout_marginEnd="@dimen/register_text_margin" >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/register_hint_phone"
+            android:textColor="@color/textColor"
+            android:inputType="number"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button
@@ -59,7 +83,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/register_button_margin"
         android:layout_marginEnd="@dimen/register_button_margin"
-        android:padding="7dp"
+        android:padding="@dimen/register_btn_padding"
         android:text="@string/register_create_account"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:textColor="#fff"

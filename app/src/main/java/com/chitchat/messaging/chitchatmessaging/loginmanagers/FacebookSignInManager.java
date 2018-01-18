@@ -1,14 +1,13 @@
-package com.chitchat.messaging.chitchatmessaging.managers;
+package com.chitchat.messaging.chitchatmessaging.loginmanagers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.chitchat.messaging.chitchatmessaging.R;
-import com.chitchat.messaging.chitchatmessaging.activities.ChatListActivity;
 import com.chitchat.messaging.chitchatmessaging.models.User;
+import com.chitchat.messaging.chitchatmessaging.utils.LoginListener;
 import com.facebook.AccessToken;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -20,6 +19,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+/**
+ * Handles Facebook login
+ */
 
 public class FacebookSignInManager {
 
@@ -27,16 +31,18 @@ public class FacebookSignInManager {
 
     private FirebaseAuth mAuth;
 
-    public FacebookSignInManager(Context context) {
+    private LoginListener mLoginListener;
+
+    public FacebookSignInManager(Context context, LoginListener loginListener) {
 
         this.mContext = context;
+        this.mLoginListener = loginListener;
         mAuth = FirebaseAuth.getInstance();
     }
 
     public void handleFacebookAccessToken(final AccessToken token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        System.out.println("actre" + credential);
 
         mAuth.signInWithCredential(credential).addOnCompleteListener(((Activity) mContext), new OnCompleteListener<AuthResult>() {
                     @Override
@@ -60,9 +66,11 @@ public class FacebookSignInManager {
                 });
     }
 
-    public void getImageUrl(FirebaseUser mUser, DatabaseReference mDatabase) {
+    private void getImageUrl(FirebaseUser mUser, DatabaseReference mDatabase) {
 
         String photoUrl;
+
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
         for (UserInfo profile : mAuth.getCurrentUser().getProviderData()) {
 
@@ -76,7 +84,7 @@ public class FacebookSignInManager {
                 // alternatively, use '?type=small|medium|large' instead of ?height=
                 photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
 
-                User user = new User(mUser.getDisplayName(), mUser.getEmail(), mContext.getString(R.string.default_status), photoUrl, mUser.getPhotoUrl().toString());
+                User user = new User(mUser.getDisplayName(), mUser.getEmail(), Long.valueOf(mUser.getPhoneNumber()), mContext.getString(R.string.default_status), photoUrl, mUser.getPhotoUrl().toString(), deviceToken);
 
                 // store user details to firebase database
                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -86,17 +94,10 @@ public class FacebookSignInManager {
 
                         if (task.isSuccessful()) {
 
-                            // launch LoginActivity when user registration is complete
-                            Intent mainActivity = new Intent(mContext, ChatListActivity.class);
-                            mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            mContext.startActivity(mainActivity);
-
-                            // finish current activity
-                            ((Activity) mContext).finish();
+                            mLoginListener.onLoginSuccess();
                         } else {
 
-                            // display error message
-                            Toast.makeText(mContext, "Oops.", Toast.LENGTH_SHORT).show();
+                            mLoginListener.onLoginFailure();
                         }
                     }
                 });

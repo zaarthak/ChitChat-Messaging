@@ -1,4 +1,4 @@
-package com.chitchat.messaging.chitchatmessaging.adapters;
+package com.chitchat.messaging.chitchatmessaging.adapters.chatadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,11 +9,17 @@ import android.widget.TextView;
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.Message;
 
-public class TextViewHolder extends RecyclerView.ViewHolder {
+/**
+ * View holder class for Chat Recycler adapter.
+ *
+ * Displays TEXT message sent/received by the user in each row of RecyclerView.
+ */
+
+class TextViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mMessageView, mTimestampView;
 
-    public TextViewHolder(View itemView) {
+    TextViewHolder(View itemView) {
 
         super(itemView);
 

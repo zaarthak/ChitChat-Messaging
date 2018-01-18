@@ -1,4 +1,4 @@
-package com.chitchat.messaging.chitchatmessaging.adapters;
+package com.chitchat.messaging.chitchatmessaging.adapters.chatadapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,19 +8,26 @@ import android.view.ViewGroup;
 
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.Message;
+import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListener;
 
 import java.util.ArrayList;
 
+/**
+ * Chat RecyclerView adapter
+ *
+ * @author Sarthak Grover
+ */
+
 public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-    private LayoutInflater inflater;
-
-    private ArrayList<Message> messageList = new ArrayList<>();
 
     private static final int IMAGE_RIGHT_MSG = 0;
     private static final int IMAGE_LEFT_MSG = 1;
     private static final int TEXT_RIGHT_MSG = 2;
     private static final int TEXT_LEFT_MSG = 3;
+
+    private LayoutInflater inflater;
+
+    private ArrayList<Message> messageList = new ArrayList<>();
 
     private Context mContext;
 

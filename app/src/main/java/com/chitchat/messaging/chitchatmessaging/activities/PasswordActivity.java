@@ -27,11 +27,16 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
 
+        // initialise all view components
         setUpView();
 
+        // button onCLick listener
         mResetLinkBtn.setOnClickListener(this);
     }
 
+    //----------------------------------------------------------------------------------------------
+    // button onClick listener
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
 
@@ -60,6 +65,9 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * Initialise all view components
+     */
     private void setUpView() {
 
         Toolbar mToolbar = findViewById(R.id.status_appBar);
@@ -72,6 +80,9 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         mResetLinkBtn = findViewById(R.id.send_reset_link_btn);
     }
 
+    /**
+     * Send password reset link to the email address.
+     */
     private void sendResetLink() {
 
         String emailId = mEmailEt.getEditText().getText().toString();
@@ -83,10 +94,10 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
 
-                        Toast.makeText(PasswordActivity.this, "Email sent.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PasswordActivity.this, R.string.pass_email_sent, Toast.LENGTH_SHORT).show();
                     } else {
 
-                        Toast.makeText(PasswordActivity.this, "An error occured.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PasswordActivity.this, R.string.pass_email_sent_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             });

@@ -12,8 +12,10 @@ public class ChitChatMessaging extends Application {
     public void onCreate() {
         super.onCreate();
 
+        // enable firebase disk persistence
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
+        // enable offline image loading for Picasso
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(this, Integer.MAX_VALUE));
         Picasso built = builder.build();

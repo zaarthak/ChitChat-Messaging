@@ -63,28 +63,26 @@ public class ProfileImageActivity extends AppCompatActivity {
 
         final String imageUrl = getIntent().getStringExtra("imageUrl");
 
-        if (!imageUrl.equals("default")) {
+        Picasso.with(getApplicationContext())
+                .load(imageUrl)
+                .placeholder(R.drawable.default_profile_picture)
+                .resize(480,480)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(mProfileImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        // do nothing
+                    }
 
-            Picasso.with(getApplicationContext())
-                    .load(imageUrl)
-                    .placeholder(R.drawable.default_profile_picture)
-                    .resize(480,480)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(mProfileImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            // do nothing
-                        }
+                    @Override
+                    public void onError() {
 
-                        @Override
-                        public void onError() {
+                        Picasso.with(ProfileImageActivity.this)
+                                .load(imageUrl)
+                                .placeholder(R.drawable.default_profile_picture)
+                                .into(mProfileImage);
+                    }
+                });
 
-                            Picasso.with(ProfileImageActivity.this)
-                                    .load(imageUrl)
-                                    .placeholder(R.drawable.default_profile_picture)
-                                    .into(mProfileImage);
-                        }
-                    });
-        }
     }
 }

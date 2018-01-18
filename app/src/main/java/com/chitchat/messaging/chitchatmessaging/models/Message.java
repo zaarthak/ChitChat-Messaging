@@ -1,5 +1,11 @@
 package com.chitchat.messaging.chitchatmessaging.models;
 
+/**
+ * POJO class to store message details
+ *
+ * @author Sarthak Grover
+ */
+
 public class Message {
 
     public String content;
@@ -9,7 +15,7 @@ public class Message {
     public String readStatus;
 
     public Message() {
-
+        // Default constructor required for calls to DataSnapshot.getValue(Message.class)
     }
 
     public Message(String content, String media, String type, String timeStamp, String readStatus) {

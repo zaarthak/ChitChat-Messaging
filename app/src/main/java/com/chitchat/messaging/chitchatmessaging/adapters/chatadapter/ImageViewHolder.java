@@ -1,7 +1,7 @@
-package com.chitchat.messaging.chitchatmessaging.adapters;
+package com.chitchat.messaging.chitchatmessaging.adapters.chatadapter;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -9,17 +9,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.chitchat.messaging.chitchatmessaging.R;
+import com.chitchat.messaging.chitchatmessaging.activities.ChatImageActivity;
 import com.chitchat.messaging.chitchatmessaging.models.Message;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-public class ImageViewHolder extends RecyclerView.ViewHolder {
+/**
+ * View holder class for Chat Recycler adapter.
+ *
+ * Displays IMAGE message sent/received by the user in each row of RecyclerView.
+ */
+
+class ImageViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView mImageView;
     private TextView mTimestampView;
 
-    public ImageViewHolder(View itemView) {
+    ImageViewHolder(View itemView) {
         super(itemView);
 
         mImageView = itemView.findViewById(R.id.message_image);
@@ -50,5 +57,15 @@ public class ImageViewHolder extends RecyclerView.ViewHolder {
                                 .into(mImageView);
                     }
                 });
+
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent chatImageIntent = new Intent(context, ChatImageActivity.class);
+                chatImageIntent.putExtra("chat_image", message.content);
+                context.startActivity(chatImageIntent);
+            }
+        });
     }
 }

@@ -13,20 +13,31 @@ import com.chitchat.messaging.chitchatmessaging.utils.RecyclerViewItemClickListe
 
 import java.util.ArrayList;
 
-public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactViewHolder> {
+/**
+ * ChatList RecyclerView adapter
+ *
+ * @author Sarthak Grover
+ */
+
+public class ChatListRecyclerAdapter extends RecyclerView.Adapter<ChatListViewHolder> {
 
     private ArrayList<User> usersList = new ArrayList<>();
     private ArrayList<Message> messageList = new ArrayList<>();
+    private ArrayList<String> userKeyList = new ArrayList<>();
+
+    private ArrayList<Integer> unreadMessageList = new ArrayList<>();
 
     private RecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
     private Context mContext;
 
-    public ContactRecyclerAdapter(Context context, ArrayList<User> usersList, ArrayList<Message> messageList) {
+    public ChatListRecyclerAdapter(Context context, ArrayList<User> usersList, ArrayList<String> userKeyList, ArrayList<Message> messageList, ArrayList<Integer> unreadMessageList) {
 
         this.mContext = context;
         this.usersList = usersList;
+        this.userKeyList = userKeyList;
         this.messageList = messageList;
+        this.unreadMessageList = unreadMessageList;
     }
 
     public void setOnRecyclerViewItemClickListener(RecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -34,26 +45,28 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactViewHold
     }
 
     @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChatListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_users, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_contact, parent, false);
 
-        return new ContactViewHolder(itemView);
+        return new ChatListViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ContactViewHolder holder, final int position) {
+    public void onBindViewHolder(final ChatListViewHolder holder, int position) {
 
         User user = usersList.get(holder.getAdapterPosition());
         Message message = messageList.get(holder.getAdapterPosition());
 
-        holder.bindData(mContext, user, message);
+        int readStatus = 0;//unreadMessageList.get(holder.getAdapterPosition());
+
+        holder.bindData(mContext, user, message, readStatus);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                onRecyclerViewItemClickListener.onClick(view, position);
+                onRecyclerViewItemClickListener.onClick(view, holder.getAdapterPosition());
             }
         });
     }

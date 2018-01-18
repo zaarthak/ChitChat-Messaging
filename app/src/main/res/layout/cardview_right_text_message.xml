@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="6"
-    android:paddingEnd="5dp"
-    android:paddingBottom="5dp">
+    android:paddingEnd="@dimen/card_msg_padding"
+    android:paddingBottom="@dimen/card_msg_padding">
 
     <View
         android:layout_width="0dp"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/right_bubble"
-            android:padding="6dp">
+            android:padding="@dimen/card_msg_padding">
 
             <TextView
                 android:id="@+id/msg_text_view"
@@ -35,9 +35,9 @@
                 android:id="@+id/timestamp_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:paddingStart="2dp"
-                android:paddingEnd="2dp"
+                android:textSize="@dimen/card_time_size"
+                android:paddingStart="@dimen/card_time_padding"
+                android:paddingEnd="@dimen/card_time_padding"
                 android:layout_gravity="bottom|end"/>
 
         </LinearLayout>

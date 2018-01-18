@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.User;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -20,11 +21,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextInputLayout mName, mEmail, mPassword;
+    private TextInputLayout mName, mEmail, mPassword, mPhone;
     private Button mSignUp;
+
+    ProgressDialog mProgressDialog;
 
     private FirebaseAuth mAuth;
 
@@ -42,9 +46,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mSignUp.setOnClickListener(this);
     }
 
-    //------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     // button onClick listener
-    //------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
 
@@ -67,6 +71,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mName = findViewById(R.id.register_name);
         mEmail = findViewById(R.id.register_email);
         mPassword = findViewById(R.id.register_password);
+        mPhone = findViewById(R.id.register_phone);
+
+        // setup progress dialog
+        mProgressDialog = new ProgressDialog(RegisterActivity.this);
+
+        mProgressDialog.setTitle(getString(R.string.register_progress_dialog_title));
+        mProgressDialog.setMessage(getString(R.string.register_progress_dialog_message));
+        mProgressDialog.setCanceledOnTouchOutside(false);
 
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -77,24 +89,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      */
     private void registerUser() {
 
-        // setup progress dialog
-        ProgressDialog mProgressDialog = new ProgressDialog(RegisterActivity.this);
-
-        mProgressDialog.setTitle(getString(R.string.register_progress_dialog_title));
-        mProgressDialog.setMessage(getString(R.string.register_progress_dialog_message));
-        mProgressDialog.setCanceledOnTouchOutside(false);
-
         String name = mName.getEditText().getText().toString();
         String email = mEmail.getEditText().getText().toString();
         String password = mPassword.getEditText().getText().toString();
+        String phone = mPhone.getEditText().getText().toString();
 
-        if (!(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password))) {
+        if (!(TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(phone))) {
 
+            // display progress dialog
             mProgressDialog.show();
-
             // register user to firebase authentication
-            // store name and email to firebase database
-            registerWithFirebase(name, email, password, mProgressDialog);
+            registerWithFirebase(name, email, password, Long.valueOf(phone), mProgressDialog);
         }
     }
 
@@ -106,7 +111,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
      * @param password is the password of the user
      * @param mProgressDialog is a progress dialog which is dismissed when the user registration is complete
      */
-    public void registerWithFirebase(final String name, final String email, String password, final ProgressDialog mProgressDialog) {
+    public void registerWithFirebase(final String name, final String email, String password, final Long phone, final ProgressDialog mProgressDialog) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -123,14 +128,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                     // get current user UID
                     FirebaseUser currentUser = mAuth.getCurrentUser();
-                    String UID = currentUser.getUid();
 
-                    DatabaseReference mDatabase;
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
 
                     // create a database reference for the user
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_REFERENCE).child(currentUser.getUid());
 
-                    User user = new User(name, email, getString(R.string.default_status), "default", "default");
+                    User user = new User(name, email, phone, getString(R.string.default_status), "default", "default", deviceToken);
 
                     // store user details to firebase database
                     mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {

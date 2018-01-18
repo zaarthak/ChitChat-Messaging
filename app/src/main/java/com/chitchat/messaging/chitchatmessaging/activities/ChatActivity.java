@@ -1,16 +1,12 @@
 package com.chitchat.messaging.chitchatmessaging.activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Parcelable;
-import android.provider.MediaStore;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,8 +21,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.chitchat.messaging.chitchatmessaging.R;
-import com.chitchat.messaging.chitchatmessaging.adapters.ChatRecyclerAdapter;
+import com.chitchat.messaging.chitchatmessaging.adapters.chatadapter.ChatRecyclerAdapter;
 import com.chitchat.messaging.chitchatmessaging.models.Message;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,19 +33,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import id.zelory.compressor.Compressor;
 
 public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,10 +44,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<Message> messageList = new ArrayList<>();
 
-    private EditText mInputMessage;
+    private EditText mInputMessageEt;
     private ImageButton mAddMediaBtn, mSendBtn;
-
-    private Toolbar mToolbar;
 
     private RecyclerView mMessageList;
     private ChatRecyclerAdapter adapter;
@@ -71,12 +57,15 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        setUpView();
-
+        // set up firebase database reference
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        // enable firebase persistence
         mDatabase.keepSynced(true);
-
+        // read messages from firebase database
         readMessages();
+
+        // set up view components
+        setUpView();
 
         adapter = new ChatRecyclerAdapter(ChatActivity.this, messageList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -84,45 +73,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mMessageList.setLayoutManager(linearLayoutManager);
         mMessageList.setAdapter(adapter);
 
-        //create recycler adapter
-
+        // button onCLick listeners
         mSendBtn.setOnClickListener(this);
         mAddMediaBtn.setOnClickListener(this);
     }
 
-    private void setUpView() {
-
-        mToolbar = findViewById(R.id.chat_toolbar);
-
-        if (mToolbar != null) {
-
-            setSupportActionBar(mToolbar);
-
-            // set activity title
-            // handle NullPointerException
-            if (getSupportActionBar() != null)
-                getSupportActionBar().setTitle(getIntent().getStringExtra("user_name"));
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-            mToolbar.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    Intent profileIntent = new Intent(ChatActivity.this, ProfileActivity.class);
-                    profileIntent.putExtra("user_id", getIntent().getStringExtra("user_id"));
-                    startActivity(profileIntent);
-                }
-            });
-        }
-
-        mInputMessage = findViewById(R.id.chat_input_message);
-        mSendBtn = findViewById(R.id.chat_send_btn);
-        mAddMediaBtn = findViewById(R.id.chat_add_media_btn);
-
-        mMessageList = findViewById(R.id.chat_messages_list);
-    }
-
+    //----------------------------------------------------------------------------------------------
+    // button onCLick listeners
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
 
@@ -136,6 +94,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.chat_add_media_btn:
 
                 CropImage.startPickImageActivity(this);
+                break;
+
+            case R.id.chat_toolbar:
+
+                // launch profile activity
+                Intent profileIntent = new Intent(ChatActivity.this, ProfileActivity.class);
+                profileIntent.putExtra(Constants.INTENT_USER_ID_KEY, getIntent().getStringExtra(Constants.INTENT_USER_ID_KEY));
+                startActivity(profileIntent);
                 break;
         }
     }
@@ -156,8 +122,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
-    @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // handle result of pick image chooser
@@ -185,9 +151,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 // get profile image Uri
                 final Uri resultUri = result.getUri();
                 Intent sendImageIntent = new Intent(ChatActivity.this, SendImageActivity.class);
-                sendImageIntent.putExtra("image_uri", resultUri.toString());
-                sendImageIntent.putExtra("user_id", getIntent().getStringExtra("user_id"));
-                sendImageIntent.putExtra("user_name", getIntent().getStringExtra("user_name"));
+                sendImageIntent.putExtra(Constants.INTENT_IMAGE_URL_KEY, resultUri.toString());
+                sendImageIntent.putExtra(Constants.INTENT_USER_ID_KEY, getIntent().getStringExtra(Constants.INTENT_USER_ID_KEY));
+                sendImageIntent.putExtra(Constants.INTENT_USER_NAME_KEY, getIntent().getStringExtra(Constants.INTENT_USER_NAME_KEY));
                 startActivity(sendImageIntent);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -199,23 +165,49 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+
         if (requestCode == CropImage.PICK_IMAGE_PERMISSIONS_REQUEST_CODE) {
+
             if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // required permissions granted, start crop image activity
                 startCropImageActivity(mCropImageUri);
             } else {
-                Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.permission_error_toast, Toast.LENGTH_LONG).show();
             }
         }
     }
 
+    /**
+     * Initialise all view components
+     */
+    private void setUpView() {
+
+        Toolbar mToolbar = findViewById(R.id.chat_toolbar);
+        mToolbar.setOnClickListener(this);
+
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+
+            getSupportActionBar().setTitle(getIntent().getStringExtra(Constants.INTENT_USER_NAME_KEY));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        mInputMessageEt = findViewById(R.id.chat_input_message);
+        mSendBtn = findViewById(R.id.chat_send_btn);
+        mAddMediaBtn = findViewById(R.id.chat_add_media_btn);
+        mMessageList = findViewById(R.id.chat_messages_list);
+    }
+
+    /**
+     * Read user messages from firebase database
+     */
     private void readMessages() {
 
         final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final String friendUser = getIntent().getStringExtra("user_id");
+        final String friendUser = getIntent().getStringExtra(Constants.INTENT_USER_ID_KEY);
 
-        mDatabase.child("Messages").child(currentUser).child(friendUser).addValueEventListener(new ValueEventListener() {
+        mDatabase.child(Constants.MESSAGES_REFERENCE).child(currentUser).child(friendUser).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -225,6 +217,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
 
+                        // add message to arrayList
                         messageList.add(0, child.getValue(Message.class));
                         adapter.notifyDataSetChanged();
                     }
@@ -237,15 +230,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        mDatabase.child("Notifications").child(currentUser).child(friendUser).removeValue();
+        mDatabase.child(Constants.NOTIFICATIONS_REFERENCE).child(currentUser).child(friendUser).removeValue();
     }
 
+    /**
+     * Send message to other user
+     */
     private void sendMessage() {
 
-        String inputMessage = mInputMessage.getText().toString().trim();
+        String inputMessage = mInputMessageEt.getText().toString().trim();
 
         final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        final String friendUser = getIntent().getStringExtra("user_id");
+        final String friendUser = getIntent().getStringExtra(Constants.INTENT_USER_ID_KEY);
 
         final Timestamp ts = new Timestamp(System.currentTimeMillis());
         final String timeStamp = String.valueOf(ts.getTime());
@@ -255,14 +251,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             final Message sentMessage = new Message(inputMessage, "text", "sent", timeStamp, "read");
             final Message receivedMessage = new Message(inputMessage, "text", "received", timeStamp, "unread");
 
-            mDatabase.child("Chats").child(currentUser).child(friendUser).setValue(sentMessage);
-            mDatabase.child("Chats").child(friendUser).child(currentUser).setValue(receivedMessage);
+            mDatabase.child(Constants.CHATS_REFERENCE).child(currentUser).child(friendUser).setValue(sentMessage);
+            mDatabase.child(Constants.CHATS_REFERENCE).child(friendUser).child(currentUser).setValue(receivedMessage);
 
-            mDatabase.child("Messages").child(currentUser).child(friendUser).child(timeStamp).setValue(sentMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+            mDatabase.child(Constants.MESSAGES_REFERENCE).child(currentUser).child(friendUser).child(timeStamp).setValue(sentMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
 
-                    mDatabase.child("Messages").child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mDatabase.child(Constants.MESSAGES_REFERENCE).child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             //handle event
@@ -271,14 +267,19 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 }
             });
 
-            mDatabase.child("Notifications").child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage);
+            mDatabase.child(Constants.NOTIFICATIONS_REFERENCE).child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage);
 
-            mInputMessage.setText("");
+            mInputMessageEt.setText("");
         }
     }
 
+    /**
+     * launch crop activity
+     *
+     * @param imageUri is the Uri of the image to be cropped
+     */
     private void startCropImageActivity(Uri imageUri) {
-        CropImage.activity(imageUri)
-                .start(this);
+
+        CropImage.activity(imageUri).start(this);
     }
 }

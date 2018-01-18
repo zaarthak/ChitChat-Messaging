@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!--<ImageView
         android:id="@+id/start_logo"
@@ -14,8 +15,8 @@
         android:padding="@dimen/app_logo_padding"/>-->
 
     <EditText
-        android:id="@+id/home_email"
-        android:layout_above="@+id/home_password"
+        android:id="@+id/login_email"
+        android:layout_above="@+id/login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email Address"
@@ -23,13 +24,13 @@
         android:textColor="@color/textColor"
         android:inputType="textEmailAddress"
         android:padding="10dp"
-        android:layout_marginStart="@dimen/home_layout_margin"
-        android:layout_marginEnd="@dimen/home_layout_margin"
-        android:layout_marginBottom="@dimen/home_layout_margin" />
+        android:layout_marginStart="@dimen/login_layout_margin"
+        android:layout_marginEnd="@dimen/login_layout_margin"
+        android:layout_marginBottom="@dimen/login_layout_margin" />
 
     <EditText
-        android:id="@+id/home_password"
-        android:layout_above="@+id/home_login_btn"
+        android:id="@+id/login_password"
+        android:layout_above="@+id/login_login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/register_hint_password"
@@ -37,21 +38,21 @@
         android:textColor="@color/textColor"
         android:inputType="textPassword"
         android:padding="10dp"
-        android:layout_marginStart="@dimen/home_layout_margin"
-        android:layout_marginEnd="@dimen/home_layout_margin"
-        android:layout_marginBottom="@dimen/home_layout_margin" />
+        android:layout_marginStart="@dimen/login_layout_margin"
+        android:layout_marginEnd="@dimen/login_layout_margin"
+        android:layout_marginBottom="@dimen/login_layout_margin" />
 
     <Button
-        android:id="@+id/home_login_btn"
+        android:id="@+id/login_login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/linear_layout"
-        android:layout_marginStart="@dimen/home_layout_margin"
-        android:layout_marginEnd="@dimen/home_layout_margin"
+        android:layout_marginStart="@dimen/login_layout_margin"
+        android:layout_marginEnd="@dimen/login_layout_margin"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:text="@string/home_log_in"
+        android:text="@string/login_log_in_btn"
         android:textColor="#fff"
-        android:background="@color/colorPrimary" />
+        android:background="@drawable/login_btn_background" />
 
     <LinearLayout
         android:id="@+id/linear_layout"
@@ -60,22 +61,46 @@
         android:orientation="horizontal"
         android:weightSum="2"
         android:layout_above="@+id/linear_layout_bottom"
-        android:layout_marginStart="@dimen/home_layout_margin"
-        android:layout_marginEnd="@dimen/home_layout_margin" >
+        android:layout_marginStart="@dimen/login_layout_margin"
+        android:layout_marginEnd="@dimen/login_layout_margin"
+        android:layout_marginTop="16dp" >
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/home_google_sign_in_btn"
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/login_google_sign_in_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_marginEnd="3dp"
+            app:fb_radius="7dp"
+            app:fb_iconPosition="left"
+            app:fb_fontIconSize="20sp"
+            app:fb_iconPaddingRight="7dp"
+            app:fb_textSize="12sp"
+            app:fb_text="Sign in with Google"
+            app:fb_textColor="#ffffff"
+            app:fb_defaultColor="#d34836"
+            app:fb_fontIconResource="&#xf1a0;"/>
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/home_fb_login_btn"
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/login_fb_login_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="3dp"
+            app:fb_radius="7dp"
+            app:fb_iconPosition="left"
+            app:fb_fontIconSize="20sp"
+            app:fb_iconPaddingRight="7dp"
+            app:fb_textSize="12sp"
+            app:fb_text="Login with Facebook"
+            app:fb_textColor="#ffffff"
+            app:fb_defaultColor="#39579B"
+            app:fb_focusColor="#6183d2"
+            app:fb_fontIconResource="&#xf230;"/>
 
     </LinearLayout>
 
@@ -85,28 +110,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="2"
-        android:layout_marginStart="@dimen/home_layout_margin"
-        android:layout_marginEnd="@dimen/home_layout_margin"
+        android:layout_marginStart="@dimen/login_layout_margin"
+        android:layout_marginEnd="@dimen/login_layout_margin"
         android:layout_alignParentBottom="true" >
 
         <Button
-            android:id="@+id/home_register_btn"
+            android:id="@+id/login_register_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/home_sign_up"
+            android:text="@string/login_sign_up"
             android:background="@color/transparentColor"
             android:textColor="#000"
             android:textAllCaps="false" />
 
         <Button
-            android:id="@+id/home_forgot_pass_btn"
+            android:id="@+id/login_forgot_pass_btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/home_forgot_password"
+            android:text="@string/login_forgot_password"
             android:background="@color/transparentColor"
             android:textColor="#000"
             android:textAllCaps="false" />

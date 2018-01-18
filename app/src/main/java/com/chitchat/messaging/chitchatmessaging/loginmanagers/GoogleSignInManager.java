@@ -1,14 +1,14 @@
-package com.chitchat.messaging.chitchatmessaging.managers;
+package com.chitchat.messaging.chitchatmessaging.loginmanagers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.chitchat.messaging.chitchatmessaging.R;
-import com.chitchat.messaging.chitchatmessaging.activities.ChatListActivity;
 import com.chitchat.messaging.chitchatmessaging.models.User;
+import com.chitchat.messaging.chitchatmessaging.utils.LoginListener;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,6 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+/**
+ * Handles Google sign-in
+ */
 
 public class GoogleSignInManager {
 
@@ -25,9 +30,12 @@ public class GoogleSignInManager {
 
     private FirebaseAuth mAuth;
 
-    public GoogleSignInManager(Context context) {
+    private LoginListener mLoginListener;
+
+    public GoogleSignInManager(Context context, LoginListener loginListener) {
 
         this.mContext = context;
+        this.mLoginListener = loginListener;
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -49,11 +57,13 @@ public class GoogleSignInManager {
                     // get current user UID
                     String UID = mAuth.getCurrentUser().getUid();
 
+                    String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
                     DatabaseReference mDatabase;
                     // create an instance of firebase database for the user
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
 
-                    User user = new User(account.getDisplayName(), account.getEmail(), mContext.getString(R.string.default_status), account.getPhotoUrl().toString(), account.getPhotoUrl().toString());
+                    User user = new User(account.getDisplayName(), account.getEmail(), mContext.getString(R.string.default_status), account.getPhotoUrl().toString(), account.getPhotoUrl().toString(), deviceToken);
 
                     // store user details to firebase database
                     mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -63,17 +73,10 @@ public class GoogleSignInManager {
 
                             if (task.isSuccessful()) {
 
-                                // launch LoginActivity when user registration is complete
-                                Intent mainActivity = new Intent(mContext, ChatListActivity.class);
-                                mainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                mContext.startActivity(mainActivity);
-
-                                // finish current activity
-                                ((Activity) mContext).finish();
+                                mLoginListener.onLoginSuccess();
                             } else {
 
-                                // display error message
-                                Toast.makeText(mContext, "Oops.", Toast.LENGTH_SHORT).show();
+                                mLoginListener.onLoginFailure();
                             }
                         }
                     });

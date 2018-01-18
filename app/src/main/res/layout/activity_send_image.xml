@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
         android:background="@drawable/send_btn_background"
-        android:padding="10dp"
-        android:layout_margin="15dp"
+        android:padding="@dimen/chat_send_btn_padding"
+        android:layout_margin="@dimen/fab_margin"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_send_black_24dp" />
