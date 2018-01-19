@@ -78,14 +78,15 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         // load user data from firebase database and storage and display in view components
         setUpUserCredentials();
 
-        // button onCLick listeners
+        // button onCLick listener
         mChangeStatus.setOnClickListener(this);
         mChangeImage.setOnClickListener(this);
+        // imageView onClick listener
         mDisplayImage.setOnClickListener(this);
     }
 
     //----------------------------------------------------------------------------------------------
-    // button onClick listeners
+    // onClick listeners
     //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
@@ -94,6 +95,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
 
             case R.id.settings_change_status :
 
+                // button onClick listener
                 // launch status activity
                 Intent statusIntent = new Intent(AccountSettingsActivity.this, StatusActivity.class);
                 statusIntent.putExtra(Constants.INTENT_STATUS_KEY, status);
@@ -102,11 +104,15 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
 
             case R.id.settings_change_profile_picture :
 
+                // button onClick listener
+                // launch pickImage intent
                 CropImage.startPickImageActivity(this);
                 break;
 
             case R.id.settings_image :
 
+                // imageView onClick listener
+                // launch profileImage activity which displays profile image
                 Intent profileImageIntent = new Intent(AccountSettingsActivity.this, ProfileImageActivity.class);
                 profileImageIntent.putExtra(Constants.INTENT_IMAGE_URL_KEY, image);
                 startActivity(profileImageIntent);
@@ -114,6 +120,10 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         }
     }
 
+    /**
+     * Activity result for pickImage intent.
+     * Activity result for cropImage intent after picking image.
+     */
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -135,6 +145,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         }
 
         // handle result of crop image activity
+        // obtain Uri of cropped image and save image in firebase storage
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -159,6 +170,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                 thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 final byte[] thumb_byte = baos.toByteArray();
 
+                // save image in firebase storage
                 saveImageInFirebaseStorage(resultUri, thumb_byte);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -184,7 +196,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -202,7 +214,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     }
 
     /**
-     * Access current user details from firebase database and displays in view components
+     * Access current user details from firebase database and displays in view components.
      */
     private void setUpUserCredentials() {
 
@@ -225,6 +237,8 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
                 // set user status
                 mStatus.setText(status);
 
+                // set profile image
+                // picasso offline capabilities used.
                 Picasso.with(getApplicationContext())
                         .load(image)
                         .placeholder(R.drawable.default_profile_picture)
@@ -257,11 +271,12 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     }
 
     /**
-     * Start crop Image activity
+     * Start crop Image activity.
      *
      * @param imageUri is Uri of the image to be cropped
      */
     private void startCropImageActivity(Uri imageUri) {
+
         CropImage.activity(imageUri)
                 .setAspectRatio(1,1)
                 .setMinCropWindowSize(700, 700)
@@ -323,7 +338,7 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
     }
 
     /**
-     * Save Uri of updated image in firebase database.
+     * Save Uri of image in firebase database.
      *
      * @param resultUri is the Uri of the image to be updated
      */
@@ -356,6 +371,9 @@ public class AccountSettingsActivity extends AppCompatActivity implements View.O
         });
     }
 
+    /**
+     * @return current user
+     */
     private String getCurrentUser() {
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {

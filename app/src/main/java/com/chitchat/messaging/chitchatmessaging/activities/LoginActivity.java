@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // initialise all view components
         setUpView();
 
+        // create firebase auth instance
         mAuth = FirebaseAuth.getInstance();
         // create firebase database instance
         mDatabase = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_REFERENCE);
@@ -106,26 +107,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.login_register_btn:
 
-                launchRegisterActivity();
+                // launch register activity
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(registerIntent);
                 break;
 
             case R.id.login_login_btn:
 
+                // log in registered user
                 loginUser();
                 break;
 
             case R.id.login_forgot_pass_btn:
 
-                launchPasswordActivity();
+                // launch password activity
+                Intent passwordIntent = new Intent(LoginActivity.this, PasswordActivity.class);
+                startActivity(passwordIntent);
                 break;
 
             case R.id.login_google_sign_in_btn:
 
-                googleSignIn();
+                // launch google sign-in intent
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, Constants.RC_SIGN_IN);
                 break;
 
             case R.id.login_fb_login_btn:
 
+                // create an instance of facebook loginManager to login via facebook
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_friends"));
                 break;
         }
@@ -138,6 +147,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // google sign-in result
         if (requestCode == Constants.RC_SIGN_IN) {
             // result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -152,7 +162,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 Toast.makeText(this, R.string.login_user_auth_failed, Toast.LENGTH_SHORT).show();
             }
-        } else {
+        }
+        // facebook login result
+        else {
             // pass the activity result back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -164,7 +176,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-        Toast.makeText(this, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.login_user_auth_failed, Toast.LENGTH_SHORT).show();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -189,7 +201,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     //----------------------------------------------------------------------------------------------
-    // Login listeners to update UI based on result of login
+    // login listeners to update UI based on result of login
     //----------------------------------------------------------------------------------------------
     @Override
     public void onLoginSuccess() {
@@ -215,7 +227,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -236,16 +248,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * Launch register activity
-     */
-    private void launchRegisterActivity() {
-
-        Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(registerIntent);
-    }
-
-    /**
-     * Login registered user using firebase authentication
+     * Login registered user using firebase authentication.
      */
     private void loginUser() {
 
@@ -256,8 +259,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             // show progress dialog
             mProgressDialog.show();
-            // login registered user
-            loginWithFirebase(email, password, mProgressDialog);
+            // log in registered user
+            loginWithFirebase(email, password);
         } else {
 
             Toast.makeText(LoginActivity.this, R.string.login_error_message, Toast.LENGTH_LONG).show();
@@ -265,13 +268,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * Logs in registered user with firebase authentication
+     * Logs in registered user with firebase authentication.
      *
      * @param email is the email ID of the user
      * @param password is the password of the user
-     * @param mProgressDialog is a progress dialog which is dismissed when the user registration is complete
      */
-    public void loginWithFirebase(String email, String password, final ProgressDialog mProgressDialog) {
+    public void loginWithFirebase(String email, String password) {
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -302,23 +304,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
-    }
-
-    /**
-     * launch password activity
-     */
-    private void launchPasswordActivity() {
-
-        Intent passwordIntent = new Intent(LoginActivity.this, PasswordActivity.class);
-        startActivity(passwordIntent);
-    }
-
-    /**
-     * launch intent for google sign-in
-     */
-    private void googleSignIn() {
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, Constants.RC_SIGN_IN);
     }
 }

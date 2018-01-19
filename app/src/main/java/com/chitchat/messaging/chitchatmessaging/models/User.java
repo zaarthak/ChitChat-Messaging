@@ -21,7 +21,7 @@ public class User {
     }
 
     public User(String username, String email, String status, String image, String thumb_image, String deviceToken) {
-
+        // Constructor without 'phone' field for google sign-in, since google default_profile_pic_drawable details does not contain user phone number.
         this.username = username;
         this.email = email;
         this.status = status;

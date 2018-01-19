@@ -29,7 +29,7 @@ import java.sql.Timestamp;
 
 public class SendImageActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String downloadUrl = "default";
+    private String downloadUrl = "";
 
     private Uri imageUri;
 
@@ -57,7 +57,7 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
 
         imageUri = Uri.parse(getIntent().getStringExtra(Constants.INTENT_IMAGE_URL_KEY));
 
-        //
+        // set image from 'imageUri' in imageView
         loadImage();
 
         // button onCLick listener
@@ -65,7 +65,7 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
     }
 
     //----------------------------------------------------------------------------------------------
-    // button onClick listeners
+    // button onClick listener
     //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
@@ -96,7 +96,7 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -118,13 +118,9 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
         mProgressDialog.setCanceledOnTouchOutside(false);
     }
 
-    private void loadImage() {
-
-        Picasso.with(this)
-                .load(imageUri)
-                .into(mImageView);
-    }
-
+    /**
+     * Save image in firebase storage and corresponding imageUri in firebase database.
+     */
     private void sendImage() {
 
         mProgressDialog.show();
@@ -181,5 +177,15 @@ public class SendImageActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         });
+    }
+
+    /**
+     * Set image in imageView.
+     */
+    private void loadImage() {
+
+        Picasso.with(this)
+                .load(imageUri)
+                .into(mImageView);
     }
 }

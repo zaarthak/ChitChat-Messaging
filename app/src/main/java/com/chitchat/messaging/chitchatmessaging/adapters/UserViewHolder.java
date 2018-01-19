@@ -33,15 +33,16 @@ class UserViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * Bind data from String to respective position in RecyclerView
+     * Bind data from 'User' to respective position in RecyclerView.
      *
-     * @param user is the user details list to set in every row
+     * @param user is the user details to set in every row
      */
     void bindData(final Context context, final User user) {
 
         mName.setText(user.username);
         mId.setText(user.status);
 
+        // picasso offline capabilities used.
         Picasso.with(context)
                 .load(user.thumb_image)
                 .placeholder(R.drawable.default_profile_picture)

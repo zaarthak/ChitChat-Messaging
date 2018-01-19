@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.User;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.chitchat.messaging.chitchatmessaging.utils.LoginListener;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,6 +40,12 @@ public class GoogleSignInManager {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * Register user to firebase authentication from 'GoogleSignInAccount' obtained by signing in to google.
+     * Further, it saves user default_profile_pic_drawable details to firebase database.
+     *
+     * @param account is the user Google default_profile_pic_drawable with which the user has logged in
+     */
     public void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
 
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -51,7 +58,7 @@ public class GoogleSignInManager {
                 if (!task.isSuccessful()) {
 
                     // display error message
-                    Toast.makeText(mContext, "An error occurred. Please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.pass_email_sent_error, Toast.LENGTH_SHORT).show();
                 } else {
 
                     // get current user UID
@@ -61,7 +68,7 @@ public class GoogleSignInManager {
 
                     DatabaseReference mDatabase;
                     // create an instance of firebase database for the user
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(UID);
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_REFERENCE).child(UID);
 
                     User user = new User(account.getDisplayName(), account.getEmail(), mContext.getString(R.string.default_status), account.getPhotoUrl().toString(), account.getPhotoUrl().toString(), deviceToken);
 

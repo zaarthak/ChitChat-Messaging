@@ -23,12 +23,12 @@
         android:id="@+id/image_send_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:scaleType="fitCenter"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/fab_margin"
         android:background="@drawable/send_btn_background"
         android:padding="@dimen/chat_send_btn_padding"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_send_black_24dp" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/send_btn_image" />
 
 </RelativeLayout>

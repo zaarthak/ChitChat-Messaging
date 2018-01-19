@@ -40,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         // initialise all view components
         setUpView();
 
+        // create firebase auth instance
         mAuth = FirebaseAuth.getInstance();
 
         // sign up button onClick listener
@@ -62,7 +63,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -73,19 +74,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mPassword = findViewById(R.id.register_password);
         mPhone = findViewById(R.id.register_phone);
 
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // setup progress dialog
         mProgressDialog = new ProgressDialog(RegisterActivity.this);
-
         mProgressDialog.setTitle(getString(R.string.register_progress_dialog_title));
         mProgressDialog.setMessage(getString(R.string.register_progress_dialog_message));
         mProgressDialog.setCanceledOnTouchOutside(false);
-
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
-     * Register new user to firebase authentication
+     * Register new user to firebase authentication.
      */
     private void registerUser() {
 
@@ -99,19 +99,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             // display progress dialog
             mProgressDialog.show();
             // register user to firebase authentication
-            registerWithFirebase(name, email, password, Long.valueOf(phone), mProgressDialog);
+            registerWithFirebase(name, email, password, Long.valueOf(phone));
         }
     }
 
     /**
-     * Registers new user to firebase authentication and adds details to firebase database
+     * Register new user to firebase authentication and add details to firebase database.
      *
      * @param name is the name of the user
      * @param email is the email ID of the user
      * @param password is the password of the user
-     * @param mProgressDialog is a progress dialog which is dismissed when the user registration is complete
      */
-    public void registerWithFirebase(final String name, final String email, String password, final Long phone, final ProgressDialog mProgressDialog) {
+    public void registerWithFirebase(final String name, final String email, String password, final Long phone) {
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -122,7 +121,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 // signed in user can be handled in the listener.
                 if (!task.isSuccessful()) {
 
-                    mProgressDialog.hide();
+                    // dismiss progress dialog
+                    mProgressDialog.dismiss();
                     Toast.makeText(RegisterActivity.this, R.string.auth_failed, Toast.LENGTH_SHORT).show();
                 } else {
 

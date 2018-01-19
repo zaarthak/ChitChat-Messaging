@@ -66,7 +66,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -81,7 +81,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     }
 
     /**
-     * Send password reset link to the email address.
+     * Send password reset link to the registered email address.
      */
     private void sendResetLink() {
 
@@ -95,6 +95,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                     if (task.isSuccessful()) {
 
                         Toast.makeText(PasswordActivity.this, R.string.pass_email_sent, Toast.LENGTH_SHORT).show();
+                        mEmailEt.getEditText().setText("");
                     } else {
 
                         Toast.makeText(PasswordActivity.this, R.string.pass_email_sent_error, Toast.LENGTH_SHORT).show();

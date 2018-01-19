@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_height="match_parent">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/settings_image"
@@ -22,7 +21,7 @@
         android:layout_marginTop="@dimen/settings_display_name_top_margin"
         android:text="@string/display_name"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
+        android:textColor="@color/settings_text_color"
         android:textSize="@dimen/settings_display_name_size" />
 
     <TextView
@@ -34,7 +33,7 @@
         android:layout_marginTop="@dimen/settings_status_top_margin"
         android:text="@string/default_status"
         android:textAlignment="center"
-        android:textColor="@android:color/white"
+        android:textColor="@color/settings_text_color"
         android:textSize="@dimen/settings_status_size" />
 
     <Button
@@ -44,22 +43,24 @@
         android:layout_above="@+id/settings_change_status"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/settings_btn_bottom_margin"
-        android:paddingStart="@dimen/settings_btn_padding"
+        android:background="@drawable/round_button_green"
+        android:elevation="5dp"
         android:paddingEnd="@dimen/settings_btn_padding"
-        android:background="@color/button_profile_color"
+        android:paddingStart="@dimen/settings_btn_padding"
         android:text="@string/btn_profile_picture"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/settings_change_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/settings_change_profile_picture"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/settings_bottom_margin"
-        android:background="@color/button_profile_color"
-        android:text="@string/btn_status"
-        android:textColor="@android:color/white"
         android:layout_alignStart="@+id/settings_change_profile_picture"
-        android:layout_alignEnd="@+id/settings_change_profile_picture" />
+        android:layout_marginBottom="@dimen/settings_bottom_margin"
+        android:background="@drawable/round_button_green"
+        android:elevation="5dp"
+        android:text="@string/btn_status"
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

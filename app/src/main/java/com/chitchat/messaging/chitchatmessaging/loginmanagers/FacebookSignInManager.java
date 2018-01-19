@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.models.User;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.chitchat.messaging.chitchatmessaging.utils.LoginListener;
 import com.facebook.AccessToken;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,6 +31,7 @@ public class FacebookSignInManager {
     private Context mContext;
 
     private FirebaseAuth mAuth;
+    private FirebaseUser mUser;
 
     private LoginListener mLoginListener;
 
@@ -37,9 +39,16 @@ public class FacebookSignInManager {
 
         this.mContext = context;
         this.mLoginListener = loginListener;
+
+        // create an instance auth and get current user
         mAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * Register user to firebase authentication from facebook token obtained by logging in to facebook.
+     *
+     * @param token is the facebook login token
+     */
     public void handleFacebookAccessToken(final AccessToken token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -50,27 +59,30 @@ public class FacebookSignInManager {
 
                         if (task.isSuccessful()) {
 
-                            FirebaseUser mUser = mAuth.getCurrentUser();
+                            mUser = mAuth.getCurrentUser();
 
-                            DatabaseReference mDatabase;
-                            // create an instance of firebase database for the user
-                            mDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(mUser.getUid());
-
-                            getImageUrl(mUser, mDatabase);
-
+                            saveUserDataToFirebase();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(mContext, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.auth_failed, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
 
-    private void getImageUrl(FirebaseUser mUser, DatabaseReference mDatabase) {
+    /**
+     * Save logged-in user details to firebase database.
+     */
+    private void saveUserDataToFirebase() {
 
         String photoUrl;
 
+        User user;
+
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+        // create an instance of firebase database for the user
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(Constants.USERS_REFERENCE).child(mUser.getUid());
 
         for (UserInfo profile : mAuth.getCurrentUser().getProviderData()) {
 
@@ -84,7 +96,11 @@ public class FacebookSignInManager {
                 // alternatively, use '?type=small|medium|large' instead of ?height=
                 photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
 
-                User user = new User(mUser.getDisplayName(), mUser.getEmail(), Long.valueOf(mUser.getPhoneNumber()), mContext.getString(R.string.default_status), photoUrl, mUser.getPhotoUrl().toString(), deviceToken);
+                if (mUser.getPhoneNumber() != null) {
+                    user = new User(mUser.getDisplayName(), mUser.getEmail(), Long.valueOf(mUser.getPhoneNumber()), mContext.getString(R.string.default_status), photoUrl, mUser.getPhotoUrl().toString(), deviceToken);
+                } else {
+                    user = new User(mUser.getDisplayName(), mUser.getEmail(), mContext.getString(R.string.default_status), photoUrl, mUser.getPhotoUrl().toString(), deviceToken);
+                }
 
                 // store user details to firebase database
                 mDatabase.setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {

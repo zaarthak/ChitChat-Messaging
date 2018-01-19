@@ -9,7 +9,14 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.chitchat.messaging.chitchatmessaging.R;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.google.firebase.messaging.RemoteMessage;
+
+/**
+ * Service that generates a notification on receiving a message when the app is in foreground.
+ *
+ * NOTE : For notifications when the app is in background, Firebase functions have been used.
+ */
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
@@ -19,6 +26,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         String notificationTitle = remoteMessage.getNotification().getTitle();
         String notificationMessage = remoteMessage.getNotification().getBody();
+
+        String userId = remoteMessage.getData().get(Constants.INTENT_USER_ID_KEY);
+        String userName = remoteMessage.getData().get(Constants.INTENT_USER_NAME_KEY);
 
         String clickAction = remoteMessage.getNotification().getClickAction();
 
@@ -34,11 +44,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setOnlyAlertOnce(true);
 
         Intent resultIntent = new Intent(clickAction);
-        resultIntent.putExtra("user_id", remoteMessage.getData().get("user_id"));
-        resultIntent.putExtra("user_name", remoteMessage.getData().get("user_name"));
+        resultIntent.putExtra(Constants.INTENT_USER_ID_KEY, userId);
+        resultIntent.putExtra(Constants.INTENT_USER_NAME_KEY, userName);
 
-        // Because clicking the notification opens a new ("special") activity, there's
-        // no need to create an artificial back stack.
         PendingIntent resultPendingIntent = PendingIntent.getActivity(
                 this,
                 0,
@@ -48,11 +56,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         mBuilder.setContentIntent(resultPendingIntent);
 
-        // Sets an ID for the notification
-        int mNotificationId = 1;
-        // Gets an instance of the NotificationManager service
+        // set an ID for the notification
+        int mNotificationId = 1000;
+        // get an instance of the NotificationManager service
         NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        // Builds the notification and issues it.
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+        // builds a unique notification for each user
+        mNotifyMgr.notify(userId, mNotificationId, mBuilder.build());
     }
 }

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_hint_name"
-            android:textColor="@color/textColor"
+            android:textColor="@color/register_text_color"
             android:inputType="textCapWords"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -35,8 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_hint_email"
-            android:textColor="@color/textColor"
-            android:inputType="textEmailAddress"/>
+            android:textColor="@color/register_text_color"
+            android:inputType="textEmailAddress" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_hint_password"
-            android:textColor="@color/textColor"
+            android:textColor="@color/register_text_color"
             android:inputType="textPassword"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -71,22 +71,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/register_hint_phone"
-            android:textColor="@color/textColor"
+            android:textColor="@color/register_text_color"
             android:inputType="number"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/register_sign_up_btn"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/register_button_margin"
         android:layout_marginEnd="@dimen/register_button_margin"
+        android:background="@drawable/round_button_blue"
         android:padding="@dimen/register_btn_padding"
         android:text="@string/register_create_account"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="#fff"
-        android:background="@color/colorPrimary"/>
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

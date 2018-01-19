@@ -9,13 +9,17 @@ import android.view.View;
 
 import com.chitchat.messaging.chitchatmessaging.R;
 
+/**
+ * RecyclerView item decoration.
+ */
+
 public class SimpleDividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
 
     public SimpleDividerItemDecoration(Context context) {
 
-        mDivider = ContextCompat.getDrawable(context, R.drawable.line_divider);
+        mDivider = ContextCompat.getDrawable(context, R.drawable.recyclerview_line_divider);
     }
 
     @Override

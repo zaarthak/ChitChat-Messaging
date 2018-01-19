@@ -61,6 +61,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // enable firebase persistence
         mDatabase.keepSynced(true);
+
         // read messages from firebase database
         readMessages();
 
@@ -73,7 +74,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mMessageList.setLayoutManager(linearLayoutManager);
         mMessageList.setAdapter(adapter);
 
-        // button onCLick listeners
+        // button onCLick listener
         mSendBtn.setOnClickListener(this);
         mAddMediaBtn.setOnClickListener(this);
     }
@@ -88,11 +89,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.chat_send_btn :
 
+                // save message details in firebase database
                 sendMessage();
                 break;
 
             case R.id.chat_add_media_btn:
 
+                // launch pickImage intent
                 CropImage.startPickImageActivity(this);
                 break;
 
@@ -122,6 +125,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * Activity result for pickImage intent.
+     * Activity result for cropImage intent after picking image.
+     */
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,6 +149,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+        // handle result of crop image activity
+        // obtain Uri of cropped image and pass to sendImage activity
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -179,7 +188,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -200,7 +209,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Read user messages from firebase database
+     * Read user messages from firebase database.
      */
     private void readMessages() {
 
@@ -217,7 +226,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
 
-                        // add message to arrayList
+                        // add 'Message' to arrayList
                         messageList.add(0, child.getValue(Message.class));
                         adapter.notifyDataSetChanged();
                     }
@@ -234,7 +243,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Send message to other user
+     * Save message details in firebase database.
      */
     private void sendMessage() {
 
@@ -254,18 +263,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             mDatabase.child(Constants.CHATS_REFERENCE).child(currentUser).child(friendUser).setValue(sentMessage);
             mDatabase.child(Constants.CHATS_REFERENCE).child(friendUser).child(currentUser).setValue(receivedMessage);
 
-            mDatabase.child(Constants.MESSAGES_REFERENCE).child(currentUser).child(friendUser).child(timeStamp).setValue(sentMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-
-                    mDatabase.child(Constants.MESSAGES_REFERENCE).child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            //handle event
-                        }
-                    });
-                }
-            });
+            mDatabase.child(Constants.MESSAGES_REFERENCE).child(currentUser).child(friendUser).child(timeStamp).setValue(sentMessage);
+            mDatabase.child(Constants.MESSAGES_REFERENCE).child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage);
 
             mDatabase.child(Constants.NOTIFICATIONS_REFERENCE).child(friendUser).child(currentUser).child(timeStamp).setValue(receivedMessage);
 
@@ -274,7 +273,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * launch crop activity
+     * Launch crop activity.
      *
      * @param imageUri is the Uri of the image to be cropped
      */

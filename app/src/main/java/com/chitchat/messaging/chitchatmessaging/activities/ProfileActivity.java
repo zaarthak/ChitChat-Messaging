@@ -82,7 +82,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -101,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     /**
-     * Read user details from firebase database and display in view components
+     * Read user details from firebase database and display in view components.
      */
     private void readUser() {
 
@@ -114,6 +114,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 mProfileNameTv.setText(user.username);
                 mStatusTv.setText(user.status);
 
+                // picasso offline capabilities used.
                 Picasso.with(getApplicationContext())
                         .load(user.image)
                         .placeholder(R.drawable.default_profile_picture)

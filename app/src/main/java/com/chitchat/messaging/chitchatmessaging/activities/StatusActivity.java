@@ -57,7 +57,9 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
         mSaveButton.setOnClickListener(this);
     }
 
+    //----------------------------------------------------------------------------------------------
     // button onClick listener
+    //----------------------------------------------------------------------------------------------
     @Override
     public void onClick(View view) {
 
@@ -65,29 +67,8 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.status_save_btn :
 
-                String status = mStatus.getEditText().getText().toString();
-
-                // set up progress dialog
-                mProgressDialog = new ProgressDialog(StatusActivity.this);
-                mProgressDialog.setTitle(getString(R.string.change_status_progress_dialog_title));
-                mProgressDialog.setMessage(getString(R.string.change_status_progress_dialog_message));
-                mProgressDialog.show();
-
-                // update 'status' field in firebase database
-                mStatusDatabase.child(Constants.INTENT_STATUS_KEY).setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-
-                        if (task.isSuccessful()) {
-
-                            mProgressDialog.dismiss();
-                            Toast.makeText(getApplicationContext(), R.string.change_status_success, Toast.LENGTH_SHORT).show();
-                        } else {
-
-                            Toast.makeText(getApplicationContext(), R.string.change_status_error, Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+                saveStatus();
+                break;
         }
     }
 
@@ -108,7 +89,7 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
-     * Initialise all view components
+     * Initialise all view components.
      */
     private void setUpView() {
 
@@ -121,5 +102,38 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
 
         mStatus = findViewById(R.id.status_input);
         mSaveButton = findViewById(R.id.status_save_btn);
+
+        // set up progress dialog
+        mProgressDialog = new ProgressDialog(StatusActivity.this);
+        mProgressDialog.setTitle(getString(R.string.change_status_progress_dialog_title));
+        mProgressDialog.setMessage(getString(R.string.change_status_progress_dialog_message));
+    }
+
+    /**
+     * Update status in firebase database.
+     */
+    private void saveStatus() {
+
+        String status = mStatus.getEditText().getText().toString();
+
+        // display progress dialog
+        mProgressDialog.show();
+
+        // update 'status' field in firebase database
+        mStatusDatabase.child(Constants.INTENT_STATUS_KEY).setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                if (task.isSuccessful()) {
+
+                    // dismiss progress dialog
+                    mProgressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), R.string.change_status_success, Toast.LENGTH_SHORT).show();
+                } else {
+
+                    Toast.makeText(getApplicationContext(), R.string.change_status_error, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 }

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.chitchat.messaging.chitchatmessaging.R;
 import com.chitchat.messaging.chitchatmessaging.activities.ChatImageActivity;
 import com.chitchat.messaging.chitchatmessaging.models.Message;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -33,6 +34,11 @@ class ImageViewHolder extends RecyclerView.ViewHolder {
         mTimestampView = itemView.findViewById(R.id.timestamp_text_view);
     }
 
+    /**
+     * Binds data for 'Message' to respective position in RecyclerView.
+     *
+     * @param message is the message details stored in firebase database
+     */
     void bindData(final Context context, final Message message) {
 
         long timestamp = Long.parseLong(message.timeStamp);
@@ -40,6 +46,7 @@ class ImageViewHolder extends RecyclerView.ViewHolder {
 
         mTimestampView.setText(time);
 
+        // picasso offline capabilities used.
         Picasso.with(context)
                 .load(message.content)
                 .networkPolicy(NetworkPolicy.OFFLINE)
@@ -62,8 +69,9 @@ class ImageViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View view) {
 
+                // launch chatImage activity
                 Intent chatImageIntent = new Intent(context, ChatImageActivity.class);
-                chatImageIntent.putExtra("chat_image", message.content);
+                chatImageIntent.putExtra(Constants.INTENT_CHAT_IMAGE_KEY, message.content);
                 context.startActivity(chatImageIntent);
             }
         });

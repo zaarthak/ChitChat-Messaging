@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.chitchat.messaging.chitchatmessaging.R;
+import com.chitchat.messaging.chitchatmessaging.utils.Constants;
 import com.chitchat.messaging.chitchatmessaging.utils.SquareImageView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -20,8 +21,10 @@ public class ProfileImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_image);
 
+        // initialise all view components
         setUpView();
 
+        // set image in imageView
         setImage();
     }
 
@@ -41,6 +44,9 @@ public class ProfileImageActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initialise all view components.
+     */
     private void setUpView() {
 
         Toolbar mToolbar = findViewById(R.id.profile_image_toolbar);
@@ -52,17 +58,21 @@ public class ProfileImageActivity extends AppCompatActivity {
             // set activity title
             // handle NullPointerException
             if (getSupportActionBar() != null)
-                getSupportActionBar().setTitle("Profile image");
+                getSupportActionBar().setTitle(R.string.profile_image_activity_title);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         mProfileImage = findViewById(R.id.profile_image_view);
     }
 
+    /**
+     * Set image in imageView.
+     */
     private void setImage() {
 
-        final String imageUrl = getIntent().getStringExtra("imageUrl");
+        final String imageUrl = getIntent().getStringExtra(Constants.INTENT_IMAGE_URL_KEY);
 
+        // picasso offline capabilities used.
         Picasso.with(getApplicationContext())
                 .load(imageUrl)
                 .placeholder(R.drawable.default_profile_picture)
@@ -83,6 +93,5 @@ public class ProfileImageActivity extends AppCompatActivity {
                                 .into(mProfileImage);
                     }
                 });
-
     }
 }

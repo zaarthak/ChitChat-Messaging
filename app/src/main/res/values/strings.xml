@@ -13,6 +13,7 @@
     <string name="login_progress_dialog_title">Logging in…</string>
     <string name="login_progress_dialog_message">Please wait while we log you in</string>
     <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_hint_password">&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;</string>
 
     <!-- Strings related to Register Activity -->
     <string name="register_progress_dialog_title">Registering User…</string>
@@ -21,17 +22,17 @@
     <string name="register_hint_email">Email Address</string>
     <string name="register_hint_password">Password</string>
     <string name="register_hint_phone">Phone number</string>
-    <string name="register_create_account">Create a new account</string>
+    <string name="register_create_account">Create Account</string>
 
     <!-- Strings related to Profile Activity -->
     <string name="default_status">Hey there! I\'m using ChitChat Messaging App.</string>
     <string name="display_name">Display Name</string>
-    <string name="btn_status">change status</string>
-    <string name="btn_profile_picture">change profile picture</string>
+    <string name="btn_status">Change Status</string>
+    <string name="btn_profile_picture">Change Profile Picture</string>
 
     <!-- Strings related to Status Activity -->
     <string name="status_activity_title">Account status</string>
-    <string name="btn_save_changes">SAVE CHANGES</string>
+    <string name="btn_save_changes">Save Changes</string>
     <string name="hint_account_status">Your Account Status</string>
     <string name="change_status_progress_dialog_title">Saving changes</string>
     <string name="change_status_progress_dialog_message">Please wait while we save changes</string>
@@ -42,7 +43,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="send_reset_link">Send reset link</string>
     <string name="pass_email_sent">Email sent.</string>
-    <string name="pass_email_sent_error">An error occurred.</string>
+    <string name="pass_email_sent_error">An error occurred. Please try again.</string>
 
     <!-- Strings related to Send Image Activity-->
     <string name="send_image_progress_dialog_title">Sending image…</string>
@@ -60,12 +61,18 @@
     <string name="menu_all_users">All Users</string>
     <string name="menu_account_settings">Settings</string>
 
+    <!-- Invite intent strings -->
+    <string name="invite_friends_title">Send application invitation</string>
+    <string name="invite_friends_message">Hey, checkout this new messaging application : ChitChat Messaging Application</string>
+    <string name="invite_friends_cta_text">Install this app</string>
+
     <!-- Other strings-->
     <string name="auth_failed">Authorisation failed.</string>
     <string name="user_activity_title">Select contact</string>
     <string name="menu_invite_friends">Invite Friends</string>
-    <string name="login_user_auth_failed">User authorisation failed.</string>
+    <string name="login_user_auth_failed">User authorisation failed. Please try again.</string>
     <string name="permission_error_toast">Cancelling, required permissions are not granted.</string>
     <string name="imput_message_hint">Enter Message…</string>
+    <string name="profile_image_activity_title">Profile image</string>
 
 </resources>

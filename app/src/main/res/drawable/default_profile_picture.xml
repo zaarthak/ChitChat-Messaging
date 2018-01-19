@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:opacity="translucent">
+    <item>
+        <shape android:shape="oval">
+            <stroke android:color="#fff"/>
+            <solid android:color="#c5c5c5"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/default_profile_pic_drawable"/>
+</layer-list>

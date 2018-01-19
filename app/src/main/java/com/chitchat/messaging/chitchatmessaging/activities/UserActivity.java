@@ -50,6 +50,20 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    //----------------------------------------------------------------------------------------------
+    // recyclerView onClick listener
+    //----------------------------------------------------------------------------------------------
+    @Override
+    public void onClick(View view, int position) {
+
+        // launch chat activity of corresponding user
+        Intent chatIntent = new Intent(UserActivity.this, ChatActivity.class);
+        chatIntent.putExtra(Constants.INTENT_USER_NAME_KEY, usersList.get(position).username);
+        chatIntent.putExtra(Constants.INTENT_USER_ID_KEY, userKeyList.get(position));
+        startActivity(chatIntent);
+        finish();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -71,7 +85,9 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
      */
     private void fetchUserFromDatabase() {
 
+        // set up firebase database reference
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        // enable firebase persistence
         mDatabase.keepSynced(true);
 
         mDatabase.child(Constants.USERS_REFERENCE).orderByChild(Constants.USERNAME_REFERENCE).addValueEventListener(new ValueEventListener() {
@@ -87,6 +103,7 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
 
                         if (!child.getKey().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
+                            // update arraylist with user details
                             usersList.add(child.getValue(User.class));
                             userKeyList.add(child.getKey());
                             adapter.notifyDataSetChanged();
@@ -100,20 +117,5 @@ public class UserActivity extends AppCompatActivity implements RecyclerViewItemC
 
             }
         });
-    }
-
-    /**
-     * recyclerView onClick listener
-     *
-     * @param position is the position of the item in recyclerView
-     */
-    @Override
-    public void onClick(View view, int position) {
-
-        Intent chatIntent = new Intent(UserActivity.this, ChatActivity.class);
-        chatIntent.putExtra(Constants.INTENT_USER_NAME_KEY, usersList.get(position).username);
-        chatIntent.putExtra(Constants.INTENT_USER_ID_KEY, userKeyList.get(position));
-        startActivity(chatIntent);
-        finish();
     }
 }

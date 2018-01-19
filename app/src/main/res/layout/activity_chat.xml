@@ -46,7 +46,7 @@
                 android:layout_weight="1"
                 android:alpha="0.5"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_add_black_24dp" />
+                app:srcCompat="@drawable/add_media_btn" />
 
             <EditText
                 android:id="@+id/chat_input_message"
@@ -74,7 +74,7 @@
             android:background="@drawable/send_btn_background"
             android:padding="@dimen/chat_send_btn_padding"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_send_black_24dp" />
+            android:src="@drawable/send_btn_image" />
 
     </RelativeLayout>
 

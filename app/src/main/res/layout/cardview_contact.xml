@@ -27,7 +27,7 @@
             android:id="@+id/contact_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000"
+            android:textColor="@android:color/black"
             android:textSize="@dimen/card_name_text_size" />
 
         <TextView
@@ -48,18 +48,5 @@
         android:textSize="@dimen/card_status_text_size"
         android:layout_marginTop="@dimen/card_contact_start_margin"
         android:layout_marginEnd="@dimen/card_contact_start_margin" />
-
-    <TextView
-        android:id="@+id/contact_message_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/send_btn_background"
-        android:layout_below="@id/contact_time"
-        android:layout_alignEnd="@+id/contact_time"
-        android:layout_marginTop="@dimen/card_user_status_top_margin"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
-        android:visibility="gone"
-        android:gravity="center"/>
 
 </RelativeLayout>

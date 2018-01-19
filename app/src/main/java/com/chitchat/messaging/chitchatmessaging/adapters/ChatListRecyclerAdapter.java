@@ -23,21 +23,16 @@ public class ChatListRecyclerAdapter extends RecyclerView.Adapter<ChatListViewHo
 
     private ArrayList<User> usersList = new ArrayList<>();
     private ArrayList<Message> messageList = new ArrayList<>();
-    private ArrayList<String> userKeyList = new ArrayList<>();
-
-    private ArrayList<Integer> unreadMessageList = new ArrayList<>();
 
     private RecyclerViewItemClickListener onRecyclerViewItemClickListener;
 
     private Context mContext;
 
-    public ChatListRecyclerAdapter(Context context, ArrayList<User> usersList, ArrayList<String> userKeyList, ArrayList<Message> messageList, ArrayList<Integer> unreadMessageList) {
+    public ChatListRecyclerAdapter(Context context, ArrayList<User> usersList, ArrayList<Message> messageList) {
 
         this.mContext = context;
         this.usersList = usersList;
-        this.userKeyList = userKeyList;
         this.messageList = messageList;
-        this.unreadMessageList = unreadMessageList;
     }
 
     public void setOnRecyclerViewItemClickListener(RecyclerViewItemClickListener onRecyclerViewItemClickListener) {
@@ -58,9 +53,7 @@ public class ChatListRecyclerAdapter extends RecyclerView.Adapter<ChatListViewHo
         User user = usersList.get(holder.getAdapterPosition());
         Message message = messageList.get(holder.getAdapterPosition());
 
-        int readStatus = 0;//unreadMessageList.get(holder.getAdapterPosition());
-
-        holder.bindData(mContext, user, message, readStatus);
+        holder.bindData(mContext, user, message);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

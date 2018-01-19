@@ -27,6 +27,11 @@ class TextViewHolder extends RecyclerView.ViewHolder {
         mTimestampView = itemView.findViewById(R.id.timestamp_text_view);
     }
 
+    /**
+     * Binds data for 'Message' to respective position in RecyclerView.
+     *
+     * @param message is the message details stored in firebase database
+     */
     void bindData(Context context, Message message) {
 
         long timestamp = Long.parseLong(message.timeStamp);

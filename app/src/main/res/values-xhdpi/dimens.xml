@@ -1,50 +1,48 @@
 <resources>
 	<dimen name="fab_margin">12dp</dimen>
-
 	<dimen name="login_layout_margin">12dp</dimen>
-
-	<!-- Register activity dimens -->
 	<dimen name="register_layout_top_margin">60dp</dimen>
 	<dimen name="register_button_margin">30dp</dimen>
 	<dimen name="register_text_margin">24dp</dimen>
 	<dimen name="register_btn_padding">8.4dp</dimen>
-
-	<!-- Settings activity dimens -->
 	<dimen name="settings_status_width">222dp</dimen>
 	<dimen name="settings_bottom_margin">12dp</dimen>
 	<dimen name="settings_display_name_top_margin">13.2dp</dimen>
 	<dimen name="settings_btn_padding">7.2dp</dimen>
 	<dimen name="settings_status_top_margin">3.6dp</dimen>
 	<dimen name="settings_btn_bottom_margin">16.8dp</dimen>
-	<dimen name="settings_top_margin">48dp</dimen>
+	<dimen name="settings_top_margin">40.8dp</dimen>
 	<dimen name="settings_display_name_size">30sp</dimen>
 	<dimen name="settings_image_size">204dp</dimen>
 	<dimen name="settings_status_size">16sp</dimen>
-
-	<!-- Chat activity dimens -->
 	<dimen name="chat_send_btn_padding">12dp</dimen>
 	<dimen name="chat_activity_margin">4.8dp</dimen>
-
-	<!-- Profile activity dimens -->
-	<dimen name="profile_status_margin">9.6dp</dimen>
+	<dimen name="profile_status_margin">3.6dp</dimen>
 	<dimen name="profile_margin_top">31.2dp</dimen>
 	<dimen name="profile_image_size">216dp</dimen>
 	<dimen name="profile_display_name_margin">12dp</dimen>
 	<dimen name="profile_status_width">222dp</dimen>
-
-	<!-- Cardview message dimens -->
 	<dimen name="card_msg_padding">4.8dp</dimen>
 	<dimen name="card_image_max_height">192dp</dimen>
-	<dimen name="card_time_size">14.4sp</dimen>
+	<dimen name="card_time_size">12sp</dimen>
 	<dimen name="card_time_padding">2.4dp</dimen>
 	<dimen name="card_user_text_margin">12dp</dimen>
 	<dimen name="card_user_image_margin">4.8dp</dimen>
 	<dimen name="card_user_image_size">40.8dp</dimen>
 	<dimen name="card_user_text_start_margin">16.8dp</dimen>
-	<dimen name="card_contact_start_margin">18dp</dimen>
+	<dimen name="card_contact_start_margin">12dp</dimen>
 	<dimen name="card_contact_top_margin">7.2dp</dimen>
 	<dimen name="card_user_status_top_margin">3.6dp</dimen>
-	<dimen name="card_user_end_margin">30dp</dimen>
-	<dimen name="card_name_text_size">19.2sp</dimen>
-	<dimen name="card_status_text_size">14.4sp</dimen>
+	<dimen name="card_user_end_margin">19.2dp</dimen>
+	<dimen name="card_name_text_size">16sp</dimen>
+	<dimen name="card_status_text_size">12sp</dimen>
+	<dimen name="login_margin">48dp</dimen>
+	<dimen name="login_text_size">14sp</dimen>
+	<dimen name="login_icon_size">84dp</dimen>
+	<dimen name="login_icon_top_margin">60dp</dimen>
+	<dimen name="login_input_text_padding">8dp</dimen>
+	<dimen name="login_btn_height">45dp</dimen>
+	<dimen name="login_divider_line_start_margin">84dp</dimen>
+	<dimen name="login_divider_line_top_margin">30dp</dimen>
+	<dimen name="login_btn_margin">12dp</dimen>
 </resources>

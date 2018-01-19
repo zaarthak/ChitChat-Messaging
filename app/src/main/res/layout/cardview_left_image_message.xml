@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:weightSum="6"
     android:paddingStart="@dimen/card_msg_padding"
@@ -15,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/left_bubble"
+            android:background="@drawable/chat_left_bubble"
             android:orientation="vertical"
             android:padding="@dimen/card_msg_padding">
 
@@ -24,8 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxHeight="@dimen/card_image_max_height"
-                android:adjustViewBounds="true"
                 android:layout_marginBottom="@dimen/card_msg_padding"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"/>
 
             <TextView

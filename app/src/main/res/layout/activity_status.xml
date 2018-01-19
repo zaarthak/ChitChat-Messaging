@@ -29,16 +29,17 @@
 
     <Button
         android:id="@+id/status_save_btn"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="@dimen/register_button_margin"
         android:layout_marginEnd="@dimen/register_button_margin"
+        android:background="@drawable/round_button_blue"
+        android:foreground="?attr/selectableItemBackground"
         android:padding="@dimen/register_btn_padding"
         android:text="@string/btn_save_changes"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="#fff"
-        android:background="@color/colorPrimary" />
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

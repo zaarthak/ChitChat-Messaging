@@ -3,6 +3,17 @@
 
     <dimen name="login_layout_margin">10dp</dimen>
 
+    <!-- Login activity dimens -->
+    <dimen name="login_margin">40dp</dimen>
+    <dimen name="login_text_size">14sp</dimen>
+    <dimen name="login_icon_size">70dp</dimen>
+    <dimen name="login_icon_top_margin">50dp</dimen>
+    <dimen name="login_input_text_padding">5dp</dimen>
+    <dimen name="login_btn_height">40dp</dimen>
+    <dimen name="login_divider_line_start_margin">70dp</dimen>
+    <dimen name="login_divider_line_top_margin">30dp</dimen>
+    <dimen name="login_btn_margin">10dp</dimen>
+
     <!-- Register activity dimens -->
     <dimen name="register_layout_top_margin">50dp</dimen>
     <dimen name="register_button_margin">25dp</dimen>
@@ -30,7 +41,7 @@
     <dimen name="profile_margin_top">26dp</dimen>
     <dimen name="profile_display_name_margin">10dp</dimen>
     <dimen name="profile_status_width">185dp</dimen>
-    <dimen name="profile_status_margin">8dp</dimen>
+    <dimen name="profile_status_margin">3dp</dimen>
 
     <!-- Cardview message dimens -->
     <dimen name="card_msg_padding">4dp</dimen>

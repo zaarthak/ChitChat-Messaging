@@ -3,6 +3,10 @@ package com.chitchat.messaging.chitchatmessaging.utils;
 import android.content.Context;
 import android.util.AttributeSet;
 
+/**
+ * ImageView class that keeps the aspect ratio of the imageView as 1:1.
+ */
+
 public class SquareImageView extends android.support.v7.widget.AppCompatImageView {
 
     public SquareImageView(Context context) {
